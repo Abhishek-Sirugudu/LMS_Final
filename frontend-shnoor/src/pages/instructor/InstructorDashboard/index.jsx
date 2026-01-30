@@ -5,14 +5,14 @@ import api from '../../../api/axios';
 import InstructorDashboardView from './view';
 
 export const InstructorDashboard = () => {
-    const navigate = useNavigate();
-    const [stats, setStats] = useState({
-        myCourses: 0,
-        totalStudents: 0,
-        avgRating: 0
-    });
-    const [loading, setLoading] = useState(true);
-    const [userName, setUserName] = useState('Instructor');
+  const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    myCourses: 0,
+    totalStudents: 0,
+    avgRating: 0
+  });
+  const [loading, setLoading] = useState(true);
+  const [userName] = useState('Instructor');
   useEffect(() => {
     const fetchDashboardStats = async () => {
       try {
@@ -31,7 +31,7 @@ export const InstructorDashboard = () => {
         setStats({
           myCourses: Number(courseRes.data.total_courses),
           totalStudents: Number(studentRes.data.total_students),
-          avgRating: 4.8, // keep static
+          avgRating: 4.8,
         });
       } catch (err) {
         console.error("Dashboard stats error:", err);
@@ -44,14 +44,14 @@ export const InstructorDashboard = () => {
   }, []);
 
 
-    return (
-        <InstructorDashboardView
-            loading={loading}
-            userName={userName}
-            stats={stats}
-            navigate={navigate}
-        />
-    );
+  return (
+    <InstructorDashboardView
+      loading={loading}
+      userName={userName}
+      stats={stats}
+      navigate={navigate}
+    />
+  );
 };
 
 export default InstructorDashboard;

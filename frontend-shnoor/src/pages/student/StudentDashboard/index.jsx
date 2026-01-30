@@ -9,10 +9,9 @@ const StudentDashboard = () => {
 
   const [enrolledcount, setEnrolledCount] = useState(0);
   const [lastCourse, setLastCourse] = useState(null);
-  const [assignmentsCount, setAssignmentsCount] = useState(0);
 
   const [studentName, setStudentName] = useState("");
-  const [recommendedCourses, setRecommendedCourses] = useState([]); // NEW
+  const [recommendedCourses, setRecommendedCourses] = useState([]);
 
   const [gamification, setGamification] = useState({
     xp: 0,
@@ -22,7 +21,6 @@ const StudentDashboard = () => {
     nextLevelXP: 100,
   });
 
-  // Fetch dashboard data
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
@@ -52,7 +50,6 @@ const StudentDashboard = () => {
     fetchDashboard();
   }, []);
 
-  // Fetch student profile
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -66,7 +63,6 @@ const StudentDashboard = () => {
     fetchProfile();
   }, []);
 
-  // Fetch Recommendations (Mock Logic)
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
@@ -76,8 +72,6 @@ const StudentDashboard = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Mock Logic: If we assume user is Beginner, suggest Intermediate
-        // In real app, check user's completed courses levels.
         const allCourses = res.data || [];
         const suggestions = allCourses
           .filter(c => c.level === 'Intermediate' || c.level === 'Advanced')
@@ -98,7 +92,6 @@ const StudentDashboard = () => {
       navigate={navigate}
       enrolledCount={enrolledcount}
       lastCourse={lastCourse}
-      assignmentsCount={assignmentsCount}
       studentName={studentName}
 
       gamification={gamification}

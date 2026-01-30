@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { auth } from "../../../auth/firebase";
 import ExamRunnerView from "./view.jsx";
@@ -18,58 +18,51 @@ const ExamRunner = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  /* =========================
-     LOAD EXAM FROM BACKEND
-  ========================= */
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        navigate("/login");
+        return;
+      }
 
-useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
+      try {
+        const token = await user.getIdToken();
 
-    try {
-      const token = await user.getIdToken();
+        const res = await api.get(
+          `/api/student/exams/${examId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
 
-      const res = await api.get(
-        `/api/student/exams/${examId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` }
+        setExam(res.data);
+
+        if (res.data.duration > 0) {
+          setTimeLeft(res.data.duration * 60);
         }
-      );
+      } catch (err) {
+        console.error("Failed to load exam:", err);
 
-      setExam(res.data);
+        const status = err.response?.status;
 
-      if (res.data.duration > 0) {
-        setTimeLeft(res.data.duration * 60);
+        if (status === 403) {
+          alert("You are not enrolled in this exam.");
+          navigate("/student/exams");
+        } else if (status === 404) {
+          alert("Exam not found.");
+          navigate("/student/exams");
+        } else {
+          alert("Unable to load exam.");
+          navigate(-1);
+        }
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Failed to load exam:", err);
+    });
 
-      const status = err.response?.status;
+    return () => unsubscribe();
+  }, [examId, navigate]);
 
-      if (status === 403) {
-        alert("You are not enrolled in this exam.");
-        navigate("/student/exams");
-      } else if (status === 404) {
-        alert("Exam not found.");
-        navigate("/student/exams");
-      } else {
-        alert("Unable to load exam.");
-        navigate(-1);
-      }
-    } finally {
-      setLoading(false);
-    }
-  });
-
-  return () => unsubscribe();
-}, [examId, navigate]);
-
-  /* =========================
-     TIMER
-  ========================= */
   useEffect(() => {
     if (!exam || isSubmitted || exam.duration === 0 || timeLeft <= 0) return;
 
@@ -85,7 +78,7 @@ useEffect(() => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, isSubmitted, exam]);
+  }, [timeLeft, isSubmitted, exam, handleSubmit]);
 
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
@@ -93,10 +86,6 @@ useEffect(() => {
     return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
-  /* =========================
-     ANSWER HANDLING
-     (KEYED BY QUESTION_ID)
-  ========================= */
   const handleAnswer = (questionId, value) => {
     setAnswers(prev => ({
       ...prev,
@@ -104,10 +93,7 @@ useEffect(() => {
     }));
   };
 
-  /* =========================
-     SUBMIT EXAM (BACKEND)
-  ========================= */
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     try {
       if (isSubmitted) return;
 
@@ -125,7 +111,7 @@ useEffect(() => {
       console.error("Exam submission failed:", err);
       alert(err.response?.data?.message || "Submission failed");
     }
-  };
+  }, [isSubmitted, examId, answers]);
 
   return (
     <ExamRunnerView

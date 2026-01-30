@@ -32,11 +32,9 @@ const RegisterView = ({
     return (
         <div className="flex min-h-screen bg-slate-50 font-sans">
             { }
-            <div className="hidden md:flex flex-col justify-between w-5/12 bg-[var(--color-primary-900)] p-12 text-white relative overflow-hidden">
+            <div className="hidden md:flex flex-col justify-between w-5/12 bg-primary-900 p-12 text-white relative overflow-hidden">
                 <div className="relative z-10">
-                    <div className="flex items-center mb-2 mr-100">
-                        <img src={brandLogo} alt="Shnoor Logo" style={{ maxWidth: '150px', marginBottom: '20px', borderRadius: '10px', display: 'block' }} />
-                    </div>
+                    <img src={brandLogo} alt="Shnoor Logo" className="w-[140px] h-[140px] object-contain mb-6 rounded-3xl shrink-0 block" />
 
                     <h2 className="text-4xl font-bold mb-6 tracking-tight leading-tight">
                         Join the future of education management.
@@ -69,7 +67,7 @@ const RegisterView = ({
                             <img
                                 src={markLogo}
                                 alt="Shnoor International"
-                                style={{ width: '70px', height: '60px', marginLeft: '0px' }}
+                                className="w-[70px] h-[55px]"
                             />
                             <div>
                                 <h1 className="brand-logo text-primary text-xl md:text-2xl font-semibold mb-1 tracking-tight leading-tight">
@@ -216,7 +214,7 @@ const RegisterView = ({
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="flex-1 bg-[var(--color-primary)] hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg shadow-slate-900/10 transform transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                    className="flex-1 bg-primary-900 hover:bg-slate-800 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-slate-900/10 transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                 >
                                     {loading ? (
                                         <span className="flex items-center gap-2">

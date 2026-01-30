@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const ContestCard = ({ contest }) => {
     const navigate = useNavigate();
-    const { id, title, description, startTime, endTime, status, entryFee } =
+    const { id, title, description, startTime, status, entryFee } =
         contest;
 
     const getStatusColor = (status) => {

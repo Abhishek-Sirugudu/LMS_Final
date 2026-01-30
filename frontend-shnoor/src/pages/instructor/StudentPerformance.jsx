@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { auth } from "../../auth/firebase";
 import api from "../../api/axios";
-import "../../styles/Dashboard.css";
 
 const StudentPerformance = () => {
   const navigate = useNavigate();
@@ -27,21 +26,6 @@ const StudentPerformance = () => {
       courseTitle.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
-
-  {
-    /*const getStatusColor = (status) => {
-    switch (status) {
-      case "Excellent":
-        return "bg-green-100 text-green-800 border-green-200";
-      case "Good":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "At Risk":
-        return "bg-red-100 text-red-800 border-red-200";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };*/
-  }
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -63,156 +47,150 @@ const StudentPerformance = () => {
     fetchStudents();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px] text-slate-500 font-medium animate-pulse">
+        Loading performance data...
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6">
-      <div className="flex-between-center mb-xl">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="back-button">
-            <ArrowLeft size={16} /> Back
+    <div className="min-h-screen bg-[#f8fafc] px-6 py-4 font-sans text-primary-900">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="flex items-start gap-4">
+          <button onClick={() => navigate(-1)} className="mt-1 text-slate-400 hover:text-slate-600 transition-colors">
+            <ArrowLeft size={20} />
           </button>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">
-              Student Performance
-            </h2>
-            <p className="text-gray-500">
-              Track progress and identify students who need help.
-            </p>
+            <h2 className="text-2xl font-bold text-primary-900 tracking-tight">Student Performance</h2>
+            <p className="text-slate-500 mt-1">Track progress and identify students who need help.</p>
           </div>
         </div>
-      </div>
 
-      <div className="grid-3 mb-xl">
-        <div className="stat-card" style={{ borderLeft: "4px solid #3b82f6" }}>
-          <div className="flex-between-center">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 border-l-4 border-l-blue-500 flex justify-between items-center">
             <div>
-              <span className="stat-label">Total Students</span>
-              <div className="stat-number">{students.length}</div>
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Total Students</span>
+              <div className="text-3xl font-bold text-primary-900 mt-1">{students.length}</div>
             </div>
-            <div className="icon-circle indigo">
+            <div className="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center">
               <TrendingUp size={20} />
             </div>
           </div>
-        </div>
-        <div className="stat-card" style={{ borderLeft: "4px solid #ef4444" }}>
-          <div className="flex-between-center">
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 border-l-4 border-l-rose-500 flex justify-between items-center">
             <div>
-              <span className="stat-label">At Risk</span>
-              <div className="stat-number text-red-600">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">At Risk</span>
+              <div className="text-3xl font-bold text-rose-600 mt-1">
                 {students.filter((s) => s.status === "At Risk").length}
               </div>
             </div>
-            <div
-              className="icon-circle"
-              style={{ background: "#fee2e2", color: "#ef4444" }}
-            >
+            <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center">
               <AlertTriangle size={20} />
             </div>
           </div>
-        </div>
-        <div className="stat-card" style={{ borderLeft: "4px solid #10b981" }}>
-          <div className="flex-between-center">
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 border-l-4 border-l-emerald-500 flex justify-between items-center">
             <div>
-              <span className="stat-label">High Performers</span>
-              <div className="stat-number text-green-600">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">High Performers</span>
+              <div className="text-3xl font-bold text-emerald-600 mt-1">
                 {students.filter((s) => s.status === "Excellent").length}
               </div>
             </div>
-            <div className="icon-circle green">
+            <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
               <CheckCircle size={20} />
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="form-box full-width">
-        <div className="flex-between-center mb-lg">
-          <h3 className="section-title mb-0">Enrolled Students</h3>
-          <div className="search-bar-styled mb-0" style={{ width: "300px" }}>
-            <div className="input-icon-wrapper">
-              <Search size={16} />
+        {/* Students Table */}
+        <div className="bg-white rounded-lg border border-slate-200 shadow-sm flex flex-col">
+          <div className="px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <h3 className="font-bold text-slate-700 uppercase text-xs tracking-wide">Enrolled Students</h3>
+            <div className="relative w-full sm:w-72">
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                className="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
+                placeholder="Search student or course..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search student or course..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
           </div>
-        </div>
 
-        <div className="table-container shadow-none border-0">
-          <table>
-            <thead>
-              <tr>
-                <th>Student Name</th>
-                <th>Course</th>
-                <th>Progress</th>
-                <th>Avg. Quiz Score</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredStudents.length > 0 ? (
-                filteredStudents.map((student, index) => (
-                  <tr key={index}>
-                    <td>
-                      <div className="font-semibold text-gray-800">
-                        {student.student_name}
-                      </div>
-                      <div className="text-xs text-gray-400">
-                        ID: {student.student_id.slice(0, 8)}
-                      </div>
-                    </td>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-slate-50 border-b border-slate-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wide">Student Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wide">Course</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wide">Progress</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wide">Avg. Quiz Score</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wide">Status</th>
+                  <th className="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase tracking-wide">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredStudents.length > 0 ? (
+                  filteredStudents.map((student, index) => (
+                    <tr key={index} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="font-semibold text-primary-900 text-sm">
+                          {student.student_name}
+                        </div>
+                        <div className="text-xs text-slate-500">
+                          ID: {student.student_id ? student.student_id.slice(0, 8) : 'N/A'}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-600">
+                        {student.course_title}
+                      </td>
 
-                    <td>{student.course_title}</td>
+                      {/* STATIC VALUES FOR NOW */}
+                      <td className="px-6 py-4">
+                        <div className="w-32 bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                          <div
+                            className="h-full bg-indigo-600 rounded-full"
+                            style={{ width: "60%" }}
+                          ></div>
+                        </div>
+                        <div className="text-xs text-slate-500 mt-1 font-medium">60%</div>
+                      </td>
 
-                    {/* STATIC VALUES FOR NOW */}
-                    <td>
-                      <div
-                        className="w-full bg-gray-200 rounded-full h-2.5"
-                        style={{ width: "120px" }}
-                      >
-                        <div
-                          className="h-2.5 rounded-full bg-blue-600"
-                          style={{ width: "60%" }}
-                        ></div>
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1">
-                        60% Completed
-                      </div>
-                    </td>
+                      <td className="px-6 py-4 text-sm">
+                        <span className="font-bold text-slate-700">80%</span>
+                      </td>
 
-                    <td>
-                      <span className="font-bold text-gray-700">80%</span>
-                    </td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                          GOOD
+                        </span>
+                      </td>
 
-                    <td>
-                      <span className="px-2 py-1 rounded-full text-xs font-semibold border bg-blue-100 text-blue-800">
-                        GOOD
-                      </span>
-                    </td>
-
-                    <td>
-                      <button
-                        className="btn-action-sm"
-                        onClick={() => navigate("/instructor/chat")}
-                      >
-                        <Mail size={14} /> Message
-                      </button>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-md transition-colors"
+                          onClick={() => navigate("/instructor/chat")}
+                        >
+                          <Mail size={12} /> Message
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center py-12 text-slate-400 text-sm">
+                      No enrolled students found.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="text-center py-8 text-gray-500">
-                    No enrolled students found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

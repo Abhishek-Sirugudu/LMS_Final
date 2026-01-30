@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc, increment, setDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '../auth/firebase';
 
 export const RANKS = {

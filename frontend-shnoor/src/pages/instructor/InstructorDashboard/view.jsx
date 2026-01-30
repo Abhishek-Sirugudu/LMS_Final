@@ -23,7 +23,6 @@ import {
 } from 'recharts';
 
 const InstructorDashboardView = ({ loading, userName, stats, navigate }) => {
-  const performanceData = [];
   const [searchTerm, setSearchTerm] = useState('');
 
   if (loading) {
@@ -89,10 +88,10 @@ const InstructorDashboardView = ({ loading, userName, stats, navigate }) => {
           </div>
 
           {/* QUICK ACTIONS */}
-          <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 h-[380px]">
+          <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 h-[380px] flex flex-col">
             <h3 className="font-semibold text-base mb-6">Quick Actions</h3>
 
-            <div className="space-y-4">
+            <div className="space-y-4 overflow-y-auto flex-1 pr-2">
               <ActionButton
                 icon={<Plus size={18} />}
                 title="Create New Course"
@@ -207,14 +206,14 @@ const ActionButton = ({ icon, title, description, onClick, color }) => {
   return (
     <button
       onClick={onClick}
-      className="w-full flex items-center gap-4 p-4 border border-slate-200 rounded-lg hover:shadow-sm transition"
+      className="w-full flex items-start gap-4 p-4 border border-slate-200 rounded-lg hover:shadow-sm hover:border-slate-300 transition-all"
     >
-      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${colorMap[color]}`}>
+      <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${colorMap[color]}`}>
         {icon}
       </div>
-      <div className="text-left">
-        <div className="font-semibold text-sm">{title}</div>
-        <div className="text-xs text-slate-500">{description}</div>
+      <div className="text-left flex-1">
+        <div className="font-semibold text-sm text-slate-900">{title}</div>
+        <div className="text-xs text-slate-500 mt-0.5">{description}</div>
       </div>
     </button>
   );

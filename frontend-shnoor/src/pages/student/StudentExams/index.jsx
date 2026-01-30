@@ -13,7 +13,7 @@ const StudentExams = () => {
     const fetchExams = async () => {
       try {
         const res = await api.get("/api/exams");
-        setExams(res.data); // 👈 DIRECT rows
+        setExams(res.data);
       } catch (err) {
         console.error("Failed to load exams", err);
       } finally {

@@ -8,7 +8,6 @@ const ExamBuilderView = ({
     handleInputChange, addQuestion, updateQuestion, removeQuestion,
     handleSave, navigate
 }) => {
-    // Local state for IDE-like navigation in Step 2
     const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
 
     if (loading) return (
@@ -17,7 +16,6 @@ const ExamBuilderView = ({
         </div>
     );
 
-    // Helper to jump to a question
     const handleQuestionSelect = (index) => {
         setActiveQuestionIndex(index);
     };
@@ -41,13 +39,13 @@ const ExamBuilderView = ({
                 </div>
                 <div className="flex items-center gap-3">
                     <button
-                        className="px-4 py-2 bg-slate-100 text-slate-600 font-bold rounded-md text-xs hover:bg-slate-200 transition-colors"
+                        className="btn-instructor-secondary"
                         onClick={() => handleSave()} // Save Draft logic conceptually
                     >
                         Save Draft
                     </button>
                     <button
-                        className="px-6 py-2 bg-primary-900 hover:bg-slate-800 text-white font-bold rounded-md text-xs shadow-sm flex items-center gap-2 transition-colors"
+                        className="btn-instructor-primary"
                         onClick={handleSave}
                     >
                         <Save size={16} /> Publish Exam
@@ -239,7 +237,7 @@ const ExamBuilderView = ({
                             <div className="flex justify-end">
                                 <button
                                     onClick={() => setStep(2)}
-                                    className="px-8 py-3 bg-primary-900 hover:bg-slate-800 text-white font-bold rounded-md shadow-sm flex items-center gap-2 text-sm"
+                                    className="btn-instructor-primary px-8"
                                 >
                                     Proceed to Questions <ArrowRight size={16} />
                                 </button>
@@ -488,13 +486,13 @@ const ExamBuilderView = ({
                             <h3 className="text-lg font-bold text-slate-600 mb-2">No Questions Defined</h3>
                             <p className="text-sm max-w-xs text-center mb-6">Start building your exam by adding questions from the sidebar.</p>
                             <div className="flex gap-3">
-                                <button onClick={() => { addQuestion('mcq'); setActiveQuestionIndex(0); }} className="px-4 py-2 bg-white border border-slate-200 rounded-md shadow-sm text-sm font-bold text-indigo-600 hover:border-indigo-500">
+                                <button onClick={() => { addQuestion('mcq'); setActiveQuestionIndex(0); }} className="btn-instructor-secondary border-indigo-200 text-indigo-700 hover:bg-indigo-50">
                                     + MCQ
                                 </button>
-                                <button onClick={() => { addQuestion('coding'); setActiveQuestionIndex(0); }} className="px-4 py-2 bg-white border border-slate-200 rounded-md shadow-sm text-sm font-bold text-indigo-600 hover:border-indigo-500">
+                                <button onClick={() => { addQuestion('coding'); setActiveQuestionIndex(0); }} className="btn-instructor-secondary border-indigo-200 text-indigo-700 hover:bg-indigo-50">
                                     + Coding
                                 </button>
-                                <button onClick={() => { addQuestion('descriptive'); setActiveQuestionIndex(0); }} className="px-4 py-2 bg-white border border-slate-200 rounded-md shadow-sm text-sm font-bold text-indigo-600 hover:border-indigo-500">
+                                <button onClick={() => { addQuestion('descriptive'); setActiveQuestionIndex(0); }} className="btn-instructor-secondary border-indigo-200 text-indigo-700 hover:bg-indigo-50">
                                     + Text
                                 </button>
                             </div>

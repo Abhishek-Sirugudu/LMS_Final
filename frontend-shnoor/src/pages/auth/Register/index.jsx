@@ -6,7 +6,7 @@ import { auth } from "../../../auth/firebase";
 import RegisterView from "./view.jsx";
 
 const Register = () => {
-  const [step, setStep] = useState(1); // ✅ REQUIRED
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -23,12 +23,10 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  // ✅ Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ STEP 1 → STEP 2 (THIS WAS MISSING)
   const handleRoleSelect = (role) => {
     setFormData((prev) => ({ ...prev, role }));
     setError("");
@@ -36,13 +34,11 @@ const Register = () => {
     setStep(2);
   };
 
-  // ✅ Back button logic
   const handleBack = () => {
     setError("");
     setStep(1);
   };
 
-  // ✅ Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
@@ -51,7 +47,6 @@ const Register = () => {
     setShowConfirmPassword((prev) => !prev);
   };
 
-  // ✅ Final registration
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
@@ -97,7 +92,7 @@ const Register = () => {
 
   return (
     <RegisterView
-      step={step} // ✅ REQUIRED
+      step={step}
       formData={formData}
       error={error}
       loading={loading}
@@ -105,8 +100,8 @@ const Register = () => {
       showPassword={showPassword}
       showConfirmPassword={showConfirmPassword}
       handleChange={handleChange}
-      handleRoleSelect={handleRoleSelect} // ✅ REQUIRED
-      handleBack={handleBack}             // ✅ REQUIRED
+      handleRoleSelect={handleRoleSelect}
+      handleBack={handleBack}
       handleRegister={handleRegister}
       togglePasswordVisibility={togglePasswordVisibility}
       toggleConfirmPasswordVisibility={toggleConfirmPasswordVisibility}

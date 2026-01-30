@@ -34,10 +34,8 @@ api.interceptors.response.use(
         console.error("Logout error:", e);
       }
 
-      if (window.location.pathname !== "/login") {
-        alert(message);
-        window.location.href = "/login";
-      }
+      alert(message);
+      // ProtectedRoute will handle redirect to /login when auth state changes
     }
 
     return Promise.reject(error);

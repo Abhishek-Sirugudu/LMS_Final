@@ -12,7 +12,6 @@ const CourseDetail = () => {
   const [loading, setLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
 
-  // Fetch course + enrollment status
   useEffect(() => {
     const fetchCourseAndStatus = async () => {
       try {
@@ -41,7 +40,6 @@ const CourseDetail = () => {
     fetchCourseAndStatus();
   }, [courseId]);
 
-  // Enroll handler
   const handleEnroll = async () => {
     try {
       const token = await auth.currentUser.getIdToken(true);
@@ -60,7 +58,6 @@ const CourseDetail = () => {
     }
   };
 
-  // Continue learning handler
   const handleContinue = () => {
     navigate(`/student/course/${courseId}/learn`);
   };

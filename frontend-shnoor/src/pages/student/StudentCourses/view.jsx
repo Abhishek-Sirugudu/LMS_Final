@@ -13,8 +13,8 @@ const StudentCoursesView = ({
     handleEnroll,
 
     navigate,
-    isFreeOnly, // NEW
-    setIsFreeOnly // NEW
+    isFreeOnly,
+    setIsFreeOnly
 }) => {
 
     if (loading) return (
@@ -32,25 +32,16 @@ const StudentCoursesView = ({
             <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-slate-200 pb-6">
                 <div>
                     <h1 className="text-2xl font-bold text-primary-900 tracking-tight">Course Library</h1>
-                    <div className="flex gap-6 mt-4">
-                        <button
-                            className={`pb-2 text-sm font-bold transition-all relative ${activeTab === 'my-learning'
-                                ? 'text-indigo-600 border-b-2 border-indigo-600'
-                                : 'text-slate-500 hover:text-slate-800'
-                                }`}
-                            onClick={() => setActiveTab('my-learning')}
-                        >
-                            My Learning
-                        </button>
-                        <button
-                            className={`pb-2 text-sm font-bold transition-all relative ${activeTab === 'explore'
-                                ? 'text-indigo-600 border-b-2 border-indigo-600'
-                                : 'text-slate-500 hover:text-slate-800'
-                                }`}
-                            onClick={() => setActiveTab('explore')}
-                        >
-                            Explore Catalog
-                        </button>
+                    <div className="flex gap-6 mt-4 flex-wrap">
+                        {['my-learning', 'explore', 'free-courses', 'paid-courses', 'recommended', 'upcoming'].map(tab => (
+                            <Tab
+                                key={tab}
+                                id={tab}
+                                label={tab.replace('-', ' ')}
+                                activeTab={activeTab}
+                                onClick={setActiveTab}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>
@@ -113,7 +104,7 @@ const StudentCoursesView = ({
                     <p className="text-sm text-slate-500">Try adjusting your filters or search terms.</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {displayCourses.map((courses) => {
                         const isEnrolled = enrolledIds.includes(courses.courses_id);
                         return (
@@ -147,14 +138,14 @@ const StudentCoursesView = ({
                                     <div className="mt-auto pt-4 border-t border-slate-100">
                                         {isEnrolled ? (
                                             <button
-                                                className="w-full bg-primary-900 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded text-sm transition-colors flex items-center justify-center gap-2"
+                                                className="btn-student-primary gap-2"
                                                 onClick={() => navigate(`/student/course/${courses.courses_id}`)}
                                             >
                                                 Resume <ArrowRight size={14} />
                                             </button>
                                         ) : (
                                             <button
-                                                className="w-full bg-white border border-slate-200 text-slate-600 hover:border-indigo-500 hover:text-indigo-600 font-bold py-2 px-4 rounded text-sm transition-all flex items-center justify-center gap-2"
+                                                className="btn-student-secondary gap-2"
                                                 onClick={() => handleEnroll(courses.courses_id)}
                                             >
                                                 Enroll Now
@@ -170,5 +161,17 @@ const StudentCoursesView = ({
         </div>
     );
 };
+
+const Tab = ({ id, label, activeTab, onClick }) => (
+    <button
+        className={`pb-2 text-sm font-bold transition-all relative capitalize ${activeTab === id
+            ? 'text-indigo-600 border-b-2 border-indigo-600'
+            : 'text-slate-500 hover:text-slate-800'
+            }`}
+        onClick={() => onClick(id)}
+    >
+        {label}
+    </button>
+);
 
 export default StudentCoursesView;

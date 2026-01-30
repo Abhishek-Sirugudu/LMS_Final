@@ -14,7 +14,6 @@ const CoursePlayer = () => {
   const [completedModuleIds, setCompletedModuleIds] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch course + progress
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -37,7 +36,6 @@ const CoursePlayer = () => {
     fetchCourse();
   }, [courseId]);
 
-  // Mark module complete
   const handleMarkComplete = async () => {
     if (!currentModule) return;
 
@@ -52,7 +50,6 @@ const CoursePlayer = () => {
           : [...prev, currentModule.id]
       );
 
-      // XP update (syncs with dashboard)
       setXp((prev) => prev + 50);
     } catch (error) {
       console.error("Failed to update progress:", error);
@@ -65,8 +62,8 @@ const CoursePlayer = () => {
   const progressPercentage =
     course?.modules?.length > 0
       ? Math.round(
-          (completedModuleIds.length / course.modules.length) * 100
-        )
+        (completedModuleIds.length / course.modules.length) * 100
+      )
       : 0;
 
   return (

@@ -21,8 +21,8 @@ const AssignCourseView = ({
   toggleCourse,
 
   handleAssign,
-  showSuccessPopup, // NEW
-  setShowSuccessPopup, // NEW
+  showSuccessPopup,
+  setShowSuccessPopup,
 }) => {
   if (loading)
     return (

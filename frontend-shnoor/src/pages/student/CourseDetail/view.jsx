@@ -35,9 +35,9 @@ const CourseDetailView = ({
                 <ArrowLeft size={16} /> Back to Courses
             </button>
 
-            { }
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                { }
+
                 <div className="lg:col-span-2 space-y-8">
                     <div>
                         <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 uppercase tracking-wide mb-4">
@@ -73,7 +73,7 @@ const CourseDetailView = ({
                         </div>
                     </div>
 
-                    { }
+
                     <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
                         <h3 className="text-xl font-bold text-primary-900 mb-6">What you'll learn</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -153,7 +153,7 @@ const CourseDetailView = ({
 
                             <button
                                 onClick={isEnrolled ? handleContinue : handleEnroll}
-                                className="w-full py-3.5 px-4 rounded-xl font-bold text-lg mb-4 transition-all transform hover:-translate-y-0.5 shadow-lg bg-primary-900 hover:bg-slate-800 text-white shadow-primary-900/20"
+                                className="btn-student-primary !text-lg !py-3.5 mb-4 shadow-lg shadow-primary-900/20 hover:-translate-y-0.5"
                             >
                                 {isEnrolled ? 'Continue Learning' : 'Enroll Now'}
                             </button>

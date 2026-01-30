@@ -37,7 +37,7 @@ const StudentExamsView = ({ loading, exams, navigate }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {exams.map((exam) => (
             <div
-              key={exam.exam_id}   // ✅ FIXED KEY
+              key={exam.exam_id}
               className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden flex flex-col hover:border-indigo-300 hover:shadow-md transition-all duration-300"
             >
               {/* Thumbnail */}
@@ -61,7 +61,7 @@ const StudentExamsView = ({ loading, exams, navigate }) => {
                 </div>
 
                 <button
-                  className="mt-auto w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded text-sm transition-all flex items-center justify-center gap-2"
+                  className="btn-student-primary mt-auto gap-2"
                   onClick={() => navigate(`/student/exam/${exam.exam_id}`)}
                 >
                   <Play size={14} fill="currentColor" /> Start Exam

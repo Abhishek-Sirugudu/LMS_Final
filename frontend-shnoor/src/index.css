@@ -3,15 +3,15 @@
 @theme {
   --color-primary: #0f172a;
   --color-primary-900: #0f172a;
-  --color-indigo-600: #4f46e5;
+  --color-indigo-600: #0f172a; /* Updated to match your perfect repo (was #4f46e5) */
   --color-slate-50: #f8fafc;
   --color-slate-900: #0f172a;
-  
+
   --font-family-base: 'Inter', sans-serif;
-  
-  --radius-xl: 0.75rem;  
-  --radius-2xl: 1rem;  
-  --radius-3xl: 1.5rem;  
+
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
 }
 
 :root {
@@ -35,12 +35,18 @@ body {
   }
 }
 
-img, picture, video, canvas {
+img,
+picture,
+video,
+canvas {
   display: block;
   max-width: 100%;
 }
 
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
   font: inherit;
 }
 
@@ -70,4 +76,125 @@ a:hover {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+/* --- Custom Animations & Utilities (From Perfect Repo) --- */
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #0f172a 0%, #0f172a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #64748b;
+  border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Slow bounce animation variants */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.animate-bounce-slow {
+  animation: bounce-slow 3s infinite ease-in-out;
+}
+.animate-bounce-slow-2s {
+  animation: bounce-slow 2s infinite ease-in-out;
+}
+.animate-bounce-slow-2-5s {
+  animation: bounce-slow 2.5s infinite ease-in-out;
+}
+
+@layer components {
+  /* Student Portal Standard Buttons */
+  .btn-student-primary {
+    @apply w-full bg-primary-900 hover:bg-slate-800 text-white font-bold py-2.5 px-4 rounded-lg text-sm transition-colors shadow-sm cursor-pointer flex items-center justify-center;
+  }
+  
+  .btn-student-secondary {
+    @apply w-full bg-white border border-slate-200 text-slate-600 hover:border-indigo-500 hover:text-indigo-600 font-bold py-2.5 px-4 rounded-lg text-sm transition-all cursor-pointer flex items-center justify-center;
+  }
+
+  /* Instructor Portal Standard Buttons */
+  .btn-instructor-primary {
+    @apply bg-primary-900 hover:bg-slate-800 text-white font-bold py-2.5 px-6 rounded-lg text-sm transition-colors shadow-sm cursor-pointer flex items-center gap-2 justify-center;
+  }
+
+  .btn-instructor-secondary {
+    @apply bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-500 font-bold py-2.5 px-6 rounded-lg text-sm transition-all shadow-sm cursor-pointer flex items-center gap-2 justify-center;
+  }
 }

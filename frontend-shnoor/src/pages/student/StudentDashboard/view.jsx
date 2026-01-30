@@ -73,7 +73,7 @@ const StudentDashboardView = ({ studentName, enrolledCount, lastCourse, gamifica
                                 </div>
                                 <button
                                     onClick={() => navigate(`/student/course/${lastCourse.id}`)}
-                                    className="px-6 py-2.5 bg-primary-900 hover:bg-black text-white font-bold rounded-md text-sm transition-colors shrink-0"
+                                    className="btn-student-primary w-auto shrink-0"
                                 >
                                     Continue
                                 </button>
@@ -83,7 +83,7 @@ const StudentDashboardView = ({ studentName, enrolledCount, lastCourse, gamifica
                                 <p className="text-slate-500 text-sm mb-4">You haven't started any courses yet.</p>
                                 <button
                                     onClick={() => navigate('/student/courses')}
-                                    className="px-6 py-2 bg-indigo-50 text-indigo-700 font-bold rounded-md text-sm hover:bg-indigo-100"
+                                    className="btn-student-secondary w-auto inline-flex"
                                 >
                                     Explore Courses
                                 </button>

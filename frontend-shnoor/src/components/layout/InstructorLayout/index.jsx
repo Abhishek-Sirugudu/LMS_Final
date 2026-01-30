@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../../auth/AuthContext";
 import api from "../../../api/axios";
+import { useSocket } from "../../../context/SocketContext";
 import InstructorLayoutView from "./view.jsx";
 
 const InstructorLayout = () => {
@@ -11,6 +12,10 @@ const InstructorLayout = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [InstructorName, setInstructorName] = useState("");
+
+  // Chat Unread Count
+  const { unreadCounts } = useSocket();
+  const totalUnread = Object.values(unreadCounts).reduce((a, b) => a + b, 0);
 
   const handleLogout = async () => {
     await logout();
@@ -23,7 +28,7 @@ const InstructorLayout = () => {
       try {
         const res = await api.get("/api/users/me");
         setInstructorName(res.data.displayName);
-      } catch (err) {
+      } catch {
         console.error("Failed to fetch instructor profile");
       }
     };
@@ -43,6 +48,7 @@ const InstructorLayout = () => {
       InstructorName={InstructorName}
       handleLogout={handleLogout}
       handleNavigate={handleNavigate}
+      totalUnread={totalUnread}
     />
   );
 };

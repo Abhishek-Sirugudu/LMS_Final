@@ -43,29 +43,41 @@ const CourseListView = ({
 
         <h2 className="text-xl font-bold mb-4">{selectedCourse.title}</h2>
         {selectedCourse.modules.length === 0 ? (
-          <div className="empty-state-container">No modules added yet.</div>
+          <div className="py-12 text-center text-slate-400 bg-slate-50 rounded-lg border border-slate-200 border-dashed">
+            <div className="text-sm">No modules added yet.</div>
+          </div>
         ) : (
-          selectedCourse.modules.map((m, idx) => (
-            <div
-              key={m.module_id}
-              className="file-list-item clickable"
-              onClick={() =>
-                window.open(m.content_url, "_blank", "noopener,noreferrer")
-              }
-            >
-              <div className="file-index-circle">{idx + 1}</div>
+          <div className="space-y-2">
+            {selectedCourse.modules.map((m, idx) => (
+              <div
+                key={m.module_id}
+                className="flex items-center gap-4 p-3 bg-white border border-slate-200 rounded-lg hover:border-indigo-300 hover:shadow-sm cursor-pointer transition-all group"
+                onClick={() =>
+                  window.open(m.content_url, "_blank", "noopener,noreferrer")
+                }
+              >
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold text-xs flex items-center justify-center group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+                  {idx + 1}
+                </div>
 
-              <div className="file-info">
-                {m.type === "video" ? (
-                  <Video className="file-icon-sm video" size={16} />
-                ) : (
-                  <FileText className="file-icon-sm pdf" size={16} />
-                )}
+                <div className="flex-1 flex items-center gap-3">
+                  {m.type === "video" ? (
+                    <div className="w-8 h-8 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center">
+                      <Video size={16} />
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center">
+                      <FileText size={16} />
+                    </div>
+                  )}
 
-                <span className="file-name-row">{m.title}</span>
+                  <span className="font-medium text-slate-700 text-sm group-hover:text-indigo-700 transition-colors">
+                    {m.title}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         )}
       </div>
     );
@@ -85,7 +97,7 @@ const CourseListView = ({
             </p>
           </div>
           <button
-            className="bg-primary-900 hover:bg-slate-800 text-white font-semibold py-2 px-6 rounded-md shadow-sm flex items-center gap-2 text-sm"
+            className="btn-instructor-primary"
             onClick={onCreate}
           >
             <Plus size={16} /> Create New Course

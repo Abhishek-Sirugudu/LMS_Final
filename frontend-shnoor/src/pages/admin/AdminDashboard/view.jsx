@@ -2,25 +2,25 @@ import React from 'react';
 import { Users, BookOpen, Clock, Award, TrendingUp, Search } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+const StatCard = ({ label, value, icon: Icon, color }) => (
+  <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm group hover:border-indigo-500 transition-all">
+    <div className="flex justify-between items-start mb-4">
+      <div className={`p-3 rounded-lg ${color}`}>
+        <Icon size={22} />
+      </div>
+      <span className="flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">
+        <TrendingUp size={12} /> +4%
+      </span>
+    </div>
+    <div>
+      <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-1">{label}</p>
+      <h3 className="text-3xl font-semibold text-primary-900 tracking-tight">{value}</h3>
+    </div>
+  </div>
+);
+
 const AdminDashboardView = ({ stats, chartData, loading }) => {
   if (loading) return <div className="p-10 text-slate-400 animate-pulse font-medium">Syncing data...</div>;
-
-  const StatCard = ({ label, value, icon: Icon, color }) => (
-    <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm group hover:border-indigo-500 transition-all">
-      <div className="flex justify-between items-start mb-4">
-        <div className={`p-3 rounded-lg ${color}`}>
-          <Icon size={22} />
-        </div>
-        <span className="flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">
-          <TrendingUp size={12} /> +4%
-        </span>
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-1">{label}</p>
-        <h3 className="text-3xl font-semibold text-primary-900 tracking-tight">{value}</h3>
-      </div>
-    </div>
-  );
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700 font-sans">

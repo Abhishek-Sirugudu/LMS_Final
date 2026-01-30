@@ -4,7 +4,6 @@ import { Eye, EyeOff, LogIn, ShieldCheck, Lock, Mail } from 'lucide-react';
 import brandLogo from '../../../assets/SHnoor_logo_1.jpg';
 const markLogo = "/just_logo.svg";
 
-
 const LoginView = ({
     formData,
     setFormData,
@@ -18,15 +17,18 @@ const LoginView = ({
     const { email, password, rememberMe } = formData;
     const { setEmail, setPassword, setRememberMe } = setFormData;
 
+    const onFormSubmit = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleLogin(e);
+    };
+
     return (
         <div className="flex min-h-screen bg-slate-50 font-sans">
-            { }
-            <div className="hidden md:flex flex-col justify-between w-5/12 bg-[var(--color-primary-900)] p-12 text-white relative overflow-hidden">
+            {/* Left Side - Hero Section */}
+            <div className="hidden md:flex flex-col justify-between w-5/12 bg-primary-900 p-12 text-white relative overflow-hidden">
                 <div className="relative z-10">
-                    <div className="flex items-center mb-2 mr-100">
-                        <img src={brandLogo} alt="Shnoor Logo" style={{ maxWidth: '150px', marginBottom: '20px', borderRadius: '10px', display: 'block' }} />
-
-                    </div>
+                    <img src={brandLogo} alt="Shnoor Logo" className="w-[140px] h-[140px] object-contain mb-6 rounded-3xl shrink-0 block" />
 
                     <h2 className="text-4xl font-bold mb-6 tracking-tight leading-tight">
                         Empower your institution with system-level control.
@@ -46,21 +48,21 @@ const LoginView = ({
                     </div>
                 </div>
 
-                { }
-                <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary-900)] via-transparent to-indigo-900/20 pointer-events-none"></div>
+                {/* Background Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-900 via-transparent to-indigo-900/20 pointer-events-none"></div>
             </div>
 
-            { }
+            {/* Right Side - Login Form */}
             <div className="flex-1 flex items-center justify-center p-6 md:p-12 relative bg-white">
                 <div className="w-full max-w-[400px]">
 
-                    { }
+                    {/* Mobile Logo / Header */}
                     <div className="mb-10">
                         <div className="flex items-center mb-5">
                             <img
                                 src={markLogo}
                                 alt="Shnoor International"
-                                style={{ width: '70px', height: '55px', marginLeft: '0px' }}
+                                className="w-[70px] h-[55px]"
                             />
                             <div>
                                 <h1 className="brand-logo text-primary text-xl md:text-2xl font-semibold mb-1 tracking-tight leading-tight">
@@ -71,11 +73,11 @@ const LoginView = ({
                                 </p>
                             </div>
                         </div>
-                        <h1 className="text-2xl font-bold text-slate-900 tracking-tight mb-2">System Login</h1>
+                        <h1 className="text-2xl font-bold text-primary-900 tracking-tight mb-2">System Login</h1>
                         <p className="text-slate-500">Authorize access to your dashboard.</p>
                     </div>
 
-                    { }
+                    {/* Error Message */}
                     {error && (
                         <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm font-medium flex items-center gap-2">
                             <ShieldCheck size={18} />
@@ -83,7 +85,7 @@ const LoginView = ({
                         </div>
                     )}
 
-                    <form onSubmit={handleLogin} className="space-y-6">
+                    <form onSubmit={onFormSubmit} className="space-y-6">
                         <div className="space-y-2">
                             <label className="block text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">Email Address</label>
                             <div className="relative">
@@ -102,7 +104,7 @@ const LoginView = ({
                         <div className="space-y-2">
                             <div className="flex justify-between items-center">
                                 <label className="block text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">Password</label>
-                                <Link to="/forgot-password" className="text-xs font-bold text-[var(--color-indigo-600)] hover:text-indigo-800 hover:underline">Forgot Password?</Link>
+                                <Link to="/forgot-password" className="text-xs font-bold text-primary-900 hover:text-indigo-800 hover:underline">Forgot Password?</Link>
                             </div>
                             <div className="relative">
                                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -130,7 +132,7 @@ const LoginView = ({
                                 id="rememberMe"
                                 checked={rememberMe}
                                 onChange={(e) => setRememberMe(e.target.checked)}
-                                className="w-4 h-4 text-[var(--color-indigo-600)] border-slate-300 rounded focus:ring-offset-0 focus:ring-2 focus:ring-[var(--color-indigo-600)]/20"
+                                className="w-4 h-4 text-primary-900 border-slate-300 rounded focus:ring-offset-0 focus:ring-2 focus:ring-primary-900/20"
                             />
                             <label htmlFor="rememberMe" className="ml-2 text-sm font-medium text-slate-600 cursor-pointer select-none">Keep me logged in</label>
                         </div>
@@ -138,7 +140,7 @@ const LoginView = ({
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[var(--color-primary)] hover:bg-slate-800 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-slate-900/10 transform transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                            className="w-full bg-primary-900 hover:bg-slate-800 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-slate-900/10 transform transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                         >
                             {loading ? (
                                 <span className="flex items-center gap-2 text-sm">
@@ -176,13 +178,11 @@ const LoginView = ({
 
                     <div className="mt-8 text-center text-sm text-slate-600">
                         Don't have an ID?{' '}
-                        <Link to="/register" className="font-bold text-[var(--color-indigo-600)] hover:text-indigo-800 hover:underline">
+                        <Link to="/register" className="font-bold text-primary-900 hover:text-indigo-800 hover:underline">
                             Request Account
                         </Link>
                     </div>
                 </div>
-
-
             </div>
         </div>
     );

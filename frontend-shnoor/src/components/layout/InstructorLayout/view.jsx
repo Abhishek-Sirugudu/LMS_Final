@@ -15,6 +15,34 @@ import {
 import markLogo from "../../../assets/just_logo.jpeg";
 import { useNavigate } from "react-router-dom";
 
+const NavItem = ({ path, icon: Icon, label, badgeCount, handleNavigate, location, setIsSidebarOpen }) => {
+  const isActive = location.pathname.includes(path);
+
+  return (
+    <li
+      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 mt-1
+                  ${isActive
+          ? "bg-primary-900 text-white shadow-md"
+          : "text-slate-600 hover:bg-slate-100"
+        }`}
+      onClick={() => {
+        handleNavigate(`/instructor/${path}`);
+        setIsSidebarOpen(false);
+      }}
+    >
+      <div className="flex items-center gap-3 w-full">
+        <Icon className={isActive ? "text-white" : "text-slate-500"} />
+        <span className="font-medium flex-1">{label}</span>
+        {badgeCount > 0 && (
+          <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-sm">
+            {badgeCount}
+          </span>
+        )}
+      </div>
+    </li>
+  );
+};
+
 const InstructorLayoutView = ({
   InstructorName,
   isSidebarOpen,
@@ -26,34 +54,6 @@ const InstructorLayoutView = ({
   photoURL,
 }) => {
   const navigate = useNavigate();
-
-  const NavItem = ({ path, icon: Icon, label, badgeCount }) => {
-    const isActive = location.pathname.includes(path);
-
-    return (
-      <li
-        className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 mt-1
-                    ${isActive
-            ? "bg-primary-900 text-white shadow-md"
-            : "text-slate-600 hover:bg-slate-100"
-          }`}
-        onClick={() => {
-          handleNavigate(`/instructor/${path}`);
-          setIsSidebarOpen(false);
-        }}
-      >
-        <div className="flex items-center gap-3 w-full">
-          <Icon className={isActive ? "text-white" : "text-slate-500"} />
-          <span className="font-medium flex-1">{label}</span>
-          {badgeCount > 0 && (
-            <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-sm">
-              {badgeCount}
-            </span>
-          )}
-        </div>
-      </li>
-    );
-  };
 
   return (
     <div className="flex min-h-screen bg-slate-50 font-sans text-primary-900">
@@ -95,22 +95,25 @@ const InstructorLayoutView = ({
               Academic Ops
             </div>
             <ul className="mb-8">
-              <NavItem path="dashboard" icon={LayoutGrid} label="Dashboard" />
-              <NavItem path="add-course" icon={Upload} label="Add Course" />
+              <NavItem path="dashboard" icon={LayoutGrid} label="Dashboard" handleNavigate={handleNavigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
+              <NavItem path="add-course" icon={Upload} label="Add Course" handleNavigate={handleNavigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
             </ul>
 
             <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">
               Management
             </div>
             <ul className="mb-8">
-              <NavItem path="courses" icon={List} label="My Courses" />
-              <NavItem path="contests" icon={Trophy} label="Manage Contests" />
-              <NavItem path="exams" icon={Book} label="Exams" />
+              <NavItem path="courses" icon={List} label="My Courses" handleNavigate={handleNavigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
+              <NavItem path="contests" icon={Trophy} label="Manage Contests" handleNavigate={handleNavigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
+              <NavItem path="exams" icon={Book} label="Exams" handleNavigate={handleNavigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
               <NavItem
                 path="chat"
                 icon={MessageSquare}
                 label="Messages"
                 badgeCount={totalUnread}
+                handleNavigate={handleNavigate}
+                location={location}
+                setIsSidebarOpen={setIsSidebarOpen}
               />
             </ul>
 
@@ -122,6 +125,9 @@ const InstructorLayoutView = ({
                 path="settings"
                 icon={Settings}
                 label="Settings"
+                handleNavigate={handleNavigate}
+                location={location}
+                setIsSidebarOpen={setIsSidebarOpen}
               />
             </ul>
           </div>

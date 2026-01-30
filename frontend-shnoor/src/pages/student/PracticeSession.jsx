@@ -5,7 +5,49 @@ import ProblemDescription from '../../components/exam/ProblemDescription';
 import CodeEditorPanel from '../../components/exam/CodeEditorPanel';
 
 
-const PracticeSession = ({ question: propQuestion, value, onChange, onComplete }) => {
+const getStudentData = () => {
+    return {
+        practiceChallenges: [
+            {
+                id: '1',
+                title: 'Two Sum',
+                description: 'Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.',
+                difficulty: 'Easy',
+                starterCode: `function twoSum(nums, target) {
+  
+}`,
+                testCases: [
+                    { input: '([2, 7, 11, 15], 9)', output: '[0, 1]' },
+                    { input: '([3, 2, 4], 6)', output: '[1, 2]' }
+                ]
+            },
+            {
+                id: '2',
+                title: 'Reverse String',
+                description: 'Write a function that reverses a string. The input string is given as an array of characters s.',
+                difficulty: 'Easy',
+                starterCode: `function reverseString(s) {
+  
+}`,
+                testCases: [
+                    { input: '(["h","e","l","l","o"])', output: '["o","l","l","e","h"]' }
+                ]
+            }
+        ]
+    };
+};
+
+const languageTemplates = {
+    'javascript': '// Write your JavaScript code here\n',
+    'python': '# Write your Python code here\n',
+    'java': `// Write your Java code here
+public class Solution {
+}`,
+    'cpp': '// Write your C++ code here\n',
+    'go': '// Write your Go code here\n'
+};
+
+const PracticeSession = ({ question: propQuestion, value, onChange }) => {
     const { challengeId } = useParams();
     const navigate = useNavigate();
 
@@ -16,29 +58,23 @@ const PracticeSession = ({ question: propQuestion, value, onChange, onComplete }
     const [consoleOutput, setConsoleOutput] = useState([]);
     const [isRunning, setIsRunning] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState('javascript');
-    const [code, setCode] = useState('');
+    const [code, setCode] = useState(() => {
+        if (isEmbedded) {
+            if (value !== undefined) {
+                return value;
+            } else if (propQuestion.starterCode) {
+                return propQuestion.starterCode;
+            } else {
+                return languageTemplates['javascript'];
+            }
+        }
+        return '';
+    });
 
     const question = isEmbedded ? propQuestion : fetchedQuestion;
 
-    const languageTemplates = {
-        'javascript': '// Write your JavaScript code here\n',
-        'python': '# Write your Python code here\n',
-        'java': '// Write your Java code here\npublic class Solution {\n    // methods\n}',
-        'cpp': '// Write your C++ code here\n',
-        'go': '// Write your Go code here\n'
-    };
-
     useEffect(() => {
-        if (isEmbedded) {
-            if (value !== undefined) {
-                setCode(value);
-            } else if (propQuestion.starterCode) {
-                setCode(propQuestion.starterCode);
-            } else {
-                setCode(languageTemplates['javascript']);
-            }
-            setLoading(false);
-        } else {
+        if (!isEmbedded) {
             const fetchQuestion = () => {
                 const data = getStudentData();
                 const found = data.practiceChallenges?.find(c => c.id === challengeId);
@@ -54,7 +90,7 @@ const PracticeSession = ({ question: propQuestion, value, onChange, onComplete }
             };
             fetchQuestion();
         }
-    }, [challengeId, propQuestion, isEmbedded, value]);
+    }, [challengeId, isEmbedded, propQuestion, value]);
 
     const handleLanguageChange = (lang) => {
         setSelectedLanguage(lang);

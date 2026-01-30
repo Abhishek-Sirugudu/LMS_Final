@@ -17,88 +17,29 @@ const Suspended = () => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#f9fafb",
-        padding: "20px",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "450px",
-          width: "100%",
-          background: "#fff",
-          borderRadius: "8px",
-          padding: "30px",
-          textAlign: "center",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
-        }}
-      >
-        <div
-          style={{
-            width: "70px",
-            height: "70px",
-            borderRadius: "50%",
-            background: "#fee2e2",
-            color: "#dc2626",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "0 auto 20px",
-            fontSize: "28px",
-          }}
-        >
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+      <div className="max-w-md w-full bg-white rounded-xl p-8 text-center shadow-lg">
+        <div className="w-[70px] h-[70px] rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-5">
           <Ban size={28} />
         </div>
 
-        <h2 style={{ fontSize: "1.5rem", fontWeight: "600", color: "#111827" }}>
+        <h2 className="text-2xl font-semibold text-slate-900 mb-3">
           Account Suspended
         </h2>
 
-        <p
-          style={{
-            marginTop: "12px",
-            fontSize: "0.95rem",
-            color: "#6b7280",
-            lineHeight: "1.6",
-          }}
-        >
+        <p className="text-slate-500 leading-relaxed mb-2.5">
           Your account has been suspended by the administrator.
           <br />
           You no longer have access to the LMS.
         </p>
 
-        <p
-          style={{
-            marginTop: "10px",
-            fontSize: "0.9rem",
-            color: "#6b7280",
-          }}
-        >
+        <p className="text-sm text-slate-500 mb-6">
           Please contact support or the admin for further assistance.
         </p>
 
         <button
           onClick={handleLogout}
-          style={{
-            marginTop: "25px",
-            width: "100%",
-            padding: "12px",
-            borderRadius: "6px",
-            border: "none",
-            background: "#dc2626",
-            color: "#fff",
-            fontWeight: "600",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
-          }}
+          className="w-full py-3 px-4 rounded-xl border-none bg-red-600 hover:bg-red-700 text-white font-semibold cursor-pointer flex items-center justify-center gap-2 transition-colors shadow-lg shadow-red-600/20"
         >
           <LogOut size={16} />
           Logout

@@ -10,22 +10,19 @@ import {
 const toEmbedUrl = (url) => {
   if (!url) return "";
 
-  // Already embed
   if (url.includes("youtube.com/embed")) return url;
 
-  // watch?v=
   const watchMatch = url.match(/v=([^&]+)/);
   if (watchMatch) {
     return `https://www.youtube.com/embed/${watchMatch[1]}`;
   }
 
-  // youtu.be/
   const shortMatch = url.match(/youtu\.be\/([^?]+)/);
   if (shortMatch) {
     return `https://www.youtube.com/embed/${shortMatch[1]}`;
   }
 
-  return url; // fallback
+  return url;
 };
 
 const CoursePlayerView = ({
@@ -68,7 +65,7 @@ const CoursePlayerView = ({
 
   return (
     <div className="flex flex-col h-screen bg-primary-900 text-slate-100 overflow-hidden font-sans">
-      {}
+
       <div className="h-16 bg-slate-800 border-b border-slate-700 flex items-center justify-between px-6 flex-shrink-0 z-20 shadow-md">
         <div className="flex items-center gap-4">
           <button
@@ -101,13 +98,13 @@ const CoursePlayerView = ({
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        {}
+
         <div className="flex-1 flex flex-col relative bg-black">
-          {}
+
           <div className="flex-1 relative">
             {currentModule?.type === "video" ? (
               currentModule.url.includes("firebasestorage") ||
-              currentModule.url.match(/\.(mp4|webm|ogg)$/) ? (
+                currentModule.url.match(/\.(mp4|webm|ogg)$/) ? (
                 <video
                   controls
                   className="w-full h-full object-contain bg-black"
@@ -117,10 +114,9 @@ const CoursePlayerView = ({
                 </video>
               ) : (
                 <iframe
-                  className="w-full h-full absolute top-0 left-0"
+                  className="w-full h-full absolute top-0 left-0 border-0"
                   src={toEmbedUrl(currentModule.url)}
                   title="Video Player"
-                  frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
@@ -144,7 +140,7 @@ const CoursePlayerView = ({
             )}
           </div>
 
-          {}
+
           <div className="h-20 bg-slate-800 border-t border-slate-700 flex items-center justify-between px-8 flex-shrink-0">
             <div>
               <h2 className="text-lg font-bold text-white">
@@ -159,11 +155,10 @@ const CoursePlayerView = ({
             <button
               onClick={handleMarkComplete}
               disabled={isModuleCompleted(currentModule?.id)}
-              className={`px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all ${
-                isModuleCompleted(currentModule?.id)
-                  ? "bg-green-500/10 text-green-500 border border-green-500/20 cursor-default"
-                  : "bg-primary-900 hover:bg-slate-800 text-white shadow-lg shadow-primary-900/20"
-              }`}
+              className={`px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all ${isModuleCompleted(currentModule?.id)
+                ? "bg-green-500/10 text-green-500 border border-green-500/20 cursor-default"
+                : "bg-primary-900 hover:bg-slate-800 text-white shadow-lg shadow-primary-900/20"
+                }`}
             >
               {isModuleCompleted(currentModule?.id) ? (
                 <>
@@ -176,7 +171,7 @@ const CoursePlayerView = ({
           </div>
         </div>
 
-        {}
+
         <div className="w-80 bg-primary-900 border-l border-slate-700 flex flex-col flex-shrink-0 shadow-2xl z-10">
           <div className="p-4 bg-slate-800 border-b border-slate-700">
             <h3 className="font-bold text-slate-100 uppercase tracking-wider text-xs">
@@ -185,7 +180,7 @@ const CoursePlayerView = ({
           </div>
 
           <div className="flex-1 overflow-y-auto custom-scrollbar">
-            {course.modules?.map((module, index) => {
+            {course.modules?.map((module) => {
               const isActive = currentModule?.id === module.id;
               const isCompleted = isModuleCompleted(module.id);
 
@@ -193,9 +188,8 @@ const CoursePlayerView = ({
                 <div
                   key={module.id}
                   onClick={() => setCurrentModule(module)}
-                  className={`p-4 border-b border-slate-800 cursor-pointer transition-all hover:bg-slate-800/50 group relative ${
-                    isActive ? "bg-slate-800" : ""
-                  }`}
+                  className={`p-4 border-b border-slate-800 cursor-pointer transition-all hover:bg-slate-800/50 group relative ${isActive ? "bg-slate-800" : ""
+                    }`}
                 >
                   {isActive && (
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-600"></div>
@@ -207,11 +201,10 @@ const CoursePlayerView = ({
                         <CheckCircle className="text-green-500" size={16} />
                       ) : (
                         <div
-                          className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                            isActive
-                              ? "border-indigo-600"
-                              : "border-slate-600 group-hover:border-slate-500"
-                          }`}
+                          className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${isActive
+                            ? "border-indigo-600"
+                            : "border-slate-600 group-hover:border-slate-500"
+                            }`}
                         >
                           {isActive && (
                             <div className="w-2 h-2 rounded-full bg-indigo-600"></div>
@@ -221,11 +214,10 @@ const CoursePlayerView = ({
                     </div>
                     <div>
                       <h5
-                        className={`text-sm font-medium mb-1 leading-snug ${
-                          isActive
-                            ? "text-white"
-                            : "text-slate-300 group-hover:text-white"
-                        }`}
+                        className={`text-sm font-medium mb-1 leading-snug ${isActive
+                          ? "text-white"
+                          : "text-slate-300 group-hover:text-white"
+                          }`}
                       >
                         {module.title}
                       </h5>
@@ -249,7 +241,7 @@ const CoursePlayerView = ({
 
           <div className="p-4 bg-slate-800 border-t border-slate-700">
             <button
-              className="w-full py-3 bg-primary-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg shadow-primary-900/20 transition-all transform hover:-translate-y-0.5"
+              className="btn-student-primary shadow-lg shadow-primary-900/20 hover:-translate-y-0.5"
               onClick={() => navigate(`/student/exam/final_${courseId}`)}
             >
               Take Final Exam

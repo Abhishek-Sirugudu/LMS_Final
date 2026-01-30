@@ -51,7 +51,7 @@ const ContestManagement = () => {
                 </div>
                 <button
                     onClick={() => navigate("/instructor/contests/create")}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-primary-900 text-white rounded-lg hover:bg-primary-800 shadow-md transition-all active:scale-95"
+                    className="btn-instructor-primary"
                 >
                     <Plus className="w-5 h-5" />
                     <span className="font-medium">Create Contest</span>
@@ -66,8 +66,8 @@ const ContestManagement = () => {
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             className={`pb-3 px-1 text-sm font-medium border-b-2 transition-colors whitespace-nowrap capitalize ${activeTab === tab
-                                    ? "border-primary-900 text-primary-900"
-                                    : "border-transparent text-slate-500 hover:text-slate-700"
+                                ? "border-primary-900 text-primary-900"
+                                : "border-transparent text-slate-500 hover:text-slate-700"
                                 }`}
                         >
                             {tab} Contests

@@ -23,7 +23,7 @@ const AdminLayout = () => {
       try {
         const res = await api.get("/api/users/me");
         setAdminName(res.data.displayName);
-      } catch (err) {
+      } catch {
         console.error("Failed to fetch admin profile");
       }
     };

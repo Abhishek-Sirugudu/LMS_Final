@@ -5,7 +5,7 @@ import api from "../../../api/axios";
 import ExamBuilderView from "./view";
 
 const ExamBuilder = () => {
-  const { courseId } = useParams();
+  useParams();
   const navigate = useNavigate();
 
   const [step, setStep] = useState(1);
@@ -24,9 +24,6 @@ const ExamBuilder = () => {
     validity_unit: "Days",
   });
 
-  /* =============================
-     FETCH APPROVED COURSES
-  ============================= */
   useEffect(() => {
     const fetchApprovedCourses = async () => {
       try {
@@ -48,9 +45,6 @@ const ExamBuilder = () => {
     fetchApprovedCourses();
   }, []);
 
-  /* =============================
-     HANDLERS
-  ============================= */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -121,9 +115,6 @@ const ExamBuilder = () => {
     return null;
   };
 
-  /* =============================
-     SAVE EXAM
-  ============================= */
   const handleSave = async () => {
     const error = validateForm();
     if (error) {
@@ -135,7 +126,6 @@ const ExamBuilder = () => {
     try {
       const token = await auth.currentUser.getIdToken(true);
 
-      // 1️⃣ Create exam
       const examRes = await api.post(
         "/api/exams",
         {
@@ -155,7 +145,6 @@ const ExamBuilder = () => {
 
       const examId = examRes.data.exam_id;
 
-      // 2️⃣ Create questions
       for (let i = 0; i < formData.questions.length; i++) {
         const q = formData.questions[i];
         const order = i + 1;

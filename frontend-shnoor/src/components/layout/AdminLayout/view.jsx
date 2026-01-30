@@ -15,6 +15,27 @@ import {
 import markLogo from "../../../assets/just_logo.jpeg";
 import { useNavigate } from "react-router-dom";
 
+const NavItem = ({ path, icon: Icon, label, handleNavigate, location, setIsSidebarOpen }) => {
+  const isActive = location.pathname.includes(path);
+  return (
+    <li
+      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 mt-1
+                  ${
+                    isActive
+                      ? "bg-primary-900 text-white shadow-md"
+                      : "text-slate-600 hover:bg-slate-100"
+                  }`}
+      onClick={() => {
+        handleNavigate(`/admin/${path}`);
+        setIsSidebarOpen(false);
+      }}
+    >
+      <Icon className={isActive ? "text-white" : "text-slate-500"} />
+      <span className="font-medium">{label}</span>
+    </li>
+  );
+};
+
 const AdminLayoutView = ({
   isSidebarOpen,
   setIsSidebarOpen,
@@ -25,27 +46,6 @@ const AdminLayoutView = ({
   photoURL,
 }) => {
   const navigate = useNavigate();
-
-  const NavItem = ({ path, icon: Icon, label }) => {
-    const isActive = location.pathname.includes(path);
-    return (
-      <li
-        className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 mt-1
-                    ${
-                      isActive
-                        ? "bg-primary-900 text-white shadow-md"
-                        : "text-slate-600 hover:bg-slate-100"
-                    }`}
-        onClick={() => {
-          handleNavigate(`/admin/${path}`);
-          setIsSidebarOpen(false);
-        }}
-      >
-        <Icon className={isActive ? "text-white" : "text-slate-500"} />
-        <span className="font-medium">{label}</span>
-      </li>
-    );
-  };
 
   return (
     <div className="flex min-h-screen bg-slate-50 font-sans text-primary-900">
@@ -87,11 +87,14 @@ const AdminLayoutView = ({
               Main Menu
             </div>
             <ul className="mb-8">
-              <NavItem path="dashboard" icon={LayoutGrid} label="Dashboard" />
+              <NavItem path="dashboard" icon={LayoutGrid} label="Dashboard" handleNavigate={handleNavigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
               <NavItem
                 path="add-instructor"
                 icon={GraduationCap}
                 label="Add Instructor"
+                handleNavigate={handleNavigate}
+                location={location}
+                setIsSidebarOpen={setIsSidebarOpen}
               />
             </ul>
 
@@ -99,24 +102,33 @@ const AdminLayoutView = ({
               Management
             </div>
             <ul className="mb-8">
-              <NavItem path="manage-users" icon={Users} label="Manage Users" />
+              <NavItem path="manage-users" icon={Users} label="Manage Users" handleNavigate={handleNavigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
               <NavItem
                 path="approve-courses"
                 icon={CheckCircle}
                 label="Approve Courses"
+                handleNavigate={handleNavigate}
+                location={location}
+                setIsSidebarOpen={setIsSidebarOpen}
               />
               <NavItem
                 path="assign-course"
                 icon={UserPlus}
                 label="Assign Courses"
+                handleNavigate={handleNavigate}
+                location={location}
+                setIsSidebarOpen={setIsSidebarOpen}
               />
               <NavItem
                 path="approve-users"
                 icon={UserCircle}
                 label="Approve Users"
+                handleNavigate={handleNavigate}
+                location={location}
+                setIsSidebarOpen={setIsSidebarOpen}
               />
-              <NavItem path="certificates" icon={Award} label="Certificates" />
-              <NavItem path="settings" icon={Settings} label="Settings" />
+              <NavItem path="certificates" icon={Award} label="Certificates" handleNavigate={handleNavigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
+              <NavItem path="settings" icon={Settings} label="Settings" handleNavigate={handleNavigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
             </ul>
           </div>
         </div>

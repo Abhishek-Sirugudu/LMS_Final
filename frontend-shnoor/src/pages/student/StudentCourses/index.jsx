@@ -10,20 +10,20 @@ const StudentCourses = () => {
   const [activeTab, setActiveTab] = useState("my-learning");
   const [myCourses, setMyCourses] = useState([]);
   const [allCourses, setAllCourses] = useState([]);
+  const [recommendedCourses, setRecommendedCourses] = useState([]);
+  const [upcomingCourses, setUpcomingCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const [selectedLevel, setSelectedLevel] = useState("All");
-  const [isFreeOnly, setIsFreeOnly] = useState(false); // NEW
+  const [isFreeOnly, setIsFreeOnly] = useState(false);
 
-  // 🔑 derive enrolledIds for the VIEW
   const enrolledIds = myCourses.map(
     (c) => c.courses_id || c.id
   );
 
-  // Fetch courses (My Learning + Explore)
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -43,6 +43,17 @@ const StudentCourses = () => {
 
         setMyCourses(myRes.data || []);
         setAllCourses(exploreRes.data || []);
+
+        // TODO: Backend Integration - Fetch recommended courses
+        // api.get("/api/courses/recommended", {
+        //   headers: { Authorization: `Bearer ${token}` },
+        // }).then(res => setRecommendedCourses(res.data || []));
+
+        // TODO: Backend Integration - Fetch upcoming courses
+        // api.get("/api/courses/upcoming", {
+        //   headers: { Authorization: `Bearer ${token}` },
+        // }).then(res => setUpcomingCourses(res.data || []));
+
       } catch (err) {
         console.error("Failed to fetch courses:", err);
       } finally {
@@ -53,11 +64,27 @@ const StudentCourses = () => {
     fetchCourses();
   }, []);
 
-  // Pick active list
-  const displayCourses =
-    activeTab === "my-learning" ? myCourses : allCourses;
+  const getDisplayCourses = () => {
+    switch (activeTab) {
+      case "my-learning":
+        return myCourses;
+      case "explore":
+        return allCourses;
+      case "free-courses":
+        return allCourses.filter(c => c.is_paid === false || c.is_paid === 'false' || !c.is_paid);
+      case "paid-courses":
+        return allCourses.filter(c => c.is_paid === true || c.is_paid === 'true');
+      case "recommended":
+        return recommendedCourses;
+      case "upcoming":
+        return upcomingCourses;
+      default:
+        return allCourses;
+    }
+  };
 
-  // Apply filters
+  const displayCourses = getDisplayCourses();
+
   const filteredCourses = displayCourses.filter((course) => {
     const matchesSearch = course.title
       ?.toLowerCase()
@@ -77,7 +104,6 @@ const StudentCourses = () => {
     return matchesSearch && matchesCategory && matchesLevel && matchesPrice;
   });
 
-  // Enroll handler
   const handleEnroll = async (courseId) => {
     try {
       const token = await auth.currentUser.getIdToken(true);
@@ -88,7 +114,6 @@ const StudentCourses = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Refresh both lists after enroll
       const [myRes, exploreRes] = await Promise.all([
         api.get("/api/student/my-courses", {
           headers: { Authorization: `Bearer ${token}` },
@@ -107,7 +132,6 @@ const StudentCourses = () => {
     }
   };
 
-  // Categories for filter dropdown
   const categories = [
     ...new Set(allCourses.map((c) => c.category).filter(Boolean)),
   ];

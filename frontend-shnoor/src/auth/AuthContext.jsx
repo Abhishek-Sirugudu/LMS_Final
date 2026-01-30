@@ -1,56 +1,77 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "./firebase";
-import api from "../api/axios"; // axios instance with baseURL
+import api from "../api/axios"; // Keeps your existing axios path
 
 const AuthContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [userRole, setUserRole] = useState(null);
-  const [userStatus, setUserStatus] = useState(null);
+
+  // We consolidate everything into 'userData' to match the database row
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      try {
-        if (!user) {
-          setCurrentUser(null);
-          setUserRole(null);
-          setLoading(false);
-          setUserStatus(null);
-          return;
-        }
+      if (user) {
+        try {
+          const token = await user.getIdToken(true);
 
-        // Get Firebase token (cached, not forced refresh)
-        const token = await user.getIdToken();
-
-        // 🔴 SEND TOKEN IN HEADER (NOT BODY)
-        const res = await api.post(
-          "/api/auth/login",
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
+          const res = await api.post(
+            "/api/auth/login",
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             },
-          },
-        );
+          );
 
-        setCurrentUser(user);
-        setUserRole(res.data.user.role.toLowerCase());
-        setUserStatus(res.data.user.status.toLowerCase());
-      } catch (error) {
-        console.error("AuthContext backend sync failed:", error);
+          // 3. Status Check (Critical for new DB)
+          // The DB returns 'pending', 'active', or 'blocked'.
+          // We must block access if not active.
+          const dbStatus = res.data.user.status.toLowerCase();
+
+          if (dbStatus === 'blocked' || dbStatus === 'pending') {
+            throw new Error("Account is not active");
+          }
+
+          // 4. Save User Data (The Fix)
+          // We save the UUID (user_id) so we can use it for course enrollment later
+          setCurrentUser(user);
+          setUserData({
+            user_id: res.data.user.user_id, // <--- THIS IS THE KEY FIX
+            role: res.data.user.role.toLowerCase(),
+            status: dbStatus,
+            full_name: user.displayName,
+            email: user.email
+          });
+
+        } catch (error) {
+          console.error("AuthContext backend sync failed:", error);
+
+          // If the backend says "Blocked" (403), force logout from Firebase too
+          if (error.response?.status === 403 || error.message === "Account is not active") {
+            await signOut(auth);
+            alert("Access Denied: Your account is pending approval or blocked.");
+            // ProtectedRoute will handle redirect to /login
+          }
+
+          setCurrentUser(null);
+          setUserData(null);
+        }
+      } else {
+        // User logged out
         setCurrentUser(null);
-        setUserRole(null);
-        setUserStatus(null);
-      } finally {
-        setLoading(false);
+        setUserData(null);
       }
+      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -59,14 +80,14 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     await signOut(auth);
     setCurrentUser(null);
-    setUserRole(null);
-    setUserStatus(null);
+    setUserData(null);
   };
 
   const value = {
     currentUser,
-    userRole,
-    userStatus,
+    userData,
+    userRole: userData?.role || null,
+    userStatus: userData?.status || null,
     loading,
     logout,
   };
@@ -77,4 +98,3 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
-

@@ -16,6 +16,36 @@ import {
 } from "lucide-react";
 import markLogo from "../../../assets/just_logo.jpeg";
 
+const NavItem = ({ path, icon: Icon, label, badgeCount, navigate, location, setIsSidebarOpen }) => {
+  const isActive =
+    location.pathname.includes(path) &&
+    (path !== "courses" || !location.pathname.includes("dashboard"));
+
+  return (
+    <li
+      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 mt-1
+                  ${isActive
+          ? "bg-primary-900 text-white shadow-md"
+          : "text-slate-600 hover:bg-slate-100"
+        }`}
+      onClick={() => {
+        navigate(`/student/${path}`);
+        setIsSidebarOpen(false);
+      }}
+    >
+      <div className="flex items-center gap-3 w-full">
+        <Icon className={isActive ? "text-white" : "text-slate-500"} />
+        <span className="font-medium flex-1">{label}</span>
+        {badgeCount > 0 && (
+          <span className="bg-primary-900 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-sm">
+            {badgeCount}
+          </span>
+        )}
+      </div>
+    </li>
+  );
+};
+
 const StudentLayoutView = ({
   studentName,
   xp,
@@ -28,36 +58,6 @@ const StudentLayoutView = ({
   location,
   photoURL,
 }) => {
-  const NavItem = ({ path, icon: Icon, label, badgeCount }) => {
-    const isActive =
-      location.pathname.includes(path) &&
-      (path !== "courses" || !location.pathname.includes("dashboard"));
-
-    return (
-      <li
-        className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 mt-1
-                    ${isActive
-            ? "bg-primary-900 text-white shadow-md"
-            : "text-slate-600 hover:bg-slate-100"
-          }`}
-        onClick={() => {
-          navigate(`/student/${path}`);
-          setIsSidebarOpen(false);
-        }}
-      >
-        <div className="flex items-center gap-3 w-full">
-          <Icon className={isActive ? "text-white" : "text-slate-500"} />
-          <span className="font-medium flex-1">{label}</span>
-          {badgeCount > 0 && (
-            <span className="bg-primary-900 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-sm">
-              {badgeCount}
-            </span>
-          )}
-        </div>
-      </li>
-    );
-  };
-
   return (
     <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
       {isSidebarOpen && (
@@ -91,19 +91,22 @@ const StudentLayoutView = ({
 
           <div className="flex-1 overflow-y-auto py-6 px-4 scrollbar-thin scrollbar-thumb-slate-200">
             <ul className="space-y-1">
-              <NavItem path="dashboard" icon={TrendingUp} label="Dashboard" />
-              <NavItem path="courses" icon={List} label="My Courses" />
-              <NavItem path="exams" icon={ClipboardList} label="Exams" />
-              <NavItem path="contests" icon={Trophy} label="Weekly Contests" />
-              <NavItem path="certificates" icon={Award} label="Certificates" />
-              <NavItem path="practice" icon={Code} label="Practice Arena" />
+              <NavItem path="dashboard" icon={TrendingUp} label="Dashboard" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
+              <NavItem path="courses" icon={List} label="My Courses" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
+              <NavItem path="exams" icon={ClipboardList} label="Exams" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
+              <NavItem path="contests" icon={Trophy} label="Weekly Contests" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
+              <NavItem path="certificates" icon={Award} label="Certificates" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
+              <NavItem path="practice" icon={Code} label="Practice Arena" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
               <NavItem
                 path="chat"
                 icon={MessageSquare}
                 label="Messages"
                 badgeCount={totalUnread}
+                navigate={navigate}
+                location={location}
+                setIsSidebarOpen={setIsSidebarOpen}
               />
-              <NavItem path="settings" icon={Settings} label="Settings" />
+              <NavItem path="settings" icon={Settings} label="Settings" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
             </ul>
           </div>
         </div>

@@ -7,7 +7,6 @@ const AddCourseView = ({
     moduleForm, handleModuleChange,
     isCustomCategory,
     videoInputType, setVideoInputType,
-    pdfInputType, setPdfInputType,
     handleFileUpload, uploading, uploadProgress,
     addModule, removeModule, moveModule,
     handleSubmit, editCourseId
@@ -191,7 +190,7 @@ const AddCourseView = ({
                                                     name="isPaid"
                                                     value="false"
                                                     checked={courseData.isPaid === false || courseData.isPaid === 'false'}
-                                                    onChange={(e) => handleCourseChange({ target: { name: 'isPaid', value: false } })}
+                                                    onChange={() => handleCourseChange({ target: { name: 'isPaid', value: false } })}
                                                     className="text-indigo-600 focus:ring-indigo-500"
                                                 />
                                                 <span className="text-sm font-semibold text-slate-700">Free Course</span>
@@ -203,7 +202,7 @@ const AddCourseView = ({
                                                     name="isPaid"
                                                     value="true"
                                                     checked={courseData.isPaid === true || courseData.isPaid === 'true'}
-                                                    onChange={(e) => handleCourseChange({ target: { name: 'isPaid', value: true } })}
+                                                    onChange={() => handleCourseChange({ target: { name: 'isPaid', value: true } })}
                                                     className="text-indigo-600 focus:ring-indigo-500"
                                                 />
                                                 <span className="text-sm font-semibold text-slate-700">Paid Course</span>
@@ -234,11 +233,11 @@ const AddCourseView = ({
 
                             <div className="mt-10 flex justify-end">
                                 <button
-                                    className="bg-primary-900 hover:bg-slate-800 text-white font-semibold py-2.5 px-6 rounded-md transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                                    className="btn-instructor-primary px-6"
                                     onClick={() => setStep(2)}
                                     disabled={!courseData.title || (!courseData.category && !courseData.customCategory) || !courseData.level}
                                 >
-                                    Proceed to Curriculum <ArrowRight size={12} />
+                                    Proceed to Curriculum <ArrowRight size={16} />
                                 </button>
                             </div>
                         </div>
@@ -348,20 +347,20 @@ const AddCourseView = ({
                                     </div>
 
                                     <button
-                                        className="w-full bg-primary-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-md transition-colors flex items-center justify-center gap-2 text-sm mt-4"
+                                        className="btn-instructor-primary w-full mt-4 justify-center"
                                         onClick={addModule}
                                         disabled={!moduleForm.title || !moduleForm.url}
                                     >
-                                        <Plus size={12} /> Add Module
+                                        <Plus size={16} /> Add Module
                                     </button>
                                 </div>
 
                                 <div className="mt-12 pt-6 border-t border-slate-100 flex justify-between items-center">
                                     <button className="text-slate-500 hover:text-slate-800 font-semibold text-sm flex items-center gap-2" onClick={() => setStep(1)}>
-                                        <ArrowLeft size={12} /> Back
+                                        <ArrowLeft size={16} /> Back
                                     </button>
-                                    <button className="bg-primary-900 hover:bg-slate-800 text-white font-semibold py-2 px-6 rounded-md text-sm flex items-center gap-2" onClick={() => setStep(3)}>
-                                        Review <ArrowRight size={12} />
+                                    <button className="btn-instructor-primary px-6" onClick={() => setStep(3)}>
+                                        Review <ArrowRight size={16} />
                                     </button>
                                 </div>
                             </div>
@@ -434,20 +433,20 @@ const AddCourseView = ({
                                 </div>
                                 <div className="bg-slate-100 px-6 py-4 border-t border-slate-200 flex items-center justify-between">
                                     <button className="text-slate-600 font-bold text-sm flex items-center gap-2 hover:text-primary-900" onClick={() => setStep(2)}>
-                                        <ArrowLeft size={12} /> Edit Content
+                                        <ArrowLeft size={16} /> Edit Content
                                     </button>
                                     <div className="flex gap-3">
                                         <button
-                                            className="px-5 py-2 bg-white border border-slate-300 text-slate-700 font-bold rounded-md text-sm hover:bg-slate-50"
+                                            className="btn-instructor-secondary"
                                             onClick={() => handleSubmit('draft')}
                                         >
                                             Save Draft
                                         </button>
                                         <button
-                                            className="px-6 py-2 bg-primary-900 hover:bg-slate-800 text-white font-bold rounded-md text-sm shadow-sm flex items-center gap-2"
+                                            className="btn-instructor-primary"
                                             onClick={() => handleSubmit('pending')}
                                         >
-                                            <Check size={12} /> Submit Course
+                                            <Check size={16} /> Submit Course
                                         </button>
                                     </div>
                                 </div>

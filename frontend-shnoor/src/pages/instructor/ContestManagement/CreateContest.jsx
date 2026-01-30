@@ -179,13 +179,13 @@ const CreateContest = () => {
                         <button
                             type="button"
                             onClick={() => navigate("/instructor/contests")}
-                            className="px-6 py-2.5 text-slate-600 hover:bg-slate-50 font-medium rounded-lg transition-colors border border-transparent hover:border-slate-200"
+                            className="btn-instructor-secondary"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-6 py-2.5 bg-primary-900 text-white font-medium rounded-lg hover:bg-primary-800 shadow-md transition-all flex items-center gap-2"
+                            className="btn-instructor-primary"
                         >
                             <Save className="w-4 h-4" />
                             Create Contest

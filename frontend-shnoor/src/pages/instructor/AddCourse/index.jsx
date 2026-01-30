@@ -44,9 +44,6 @@ export const AddCourse = () => {
   const [videoInputType, setVideoInputType] = useState("url");
   const [pdfInputType, setPdfInputType] = useState("url");
 
-  /* =========================
-     LOAD COURSE (EDIT MODE)
-     ========================= */
   useEffect(() => {
     if (location.state?.courseData) {
       const data = location.state.courseData;
@@ -68,9 +65,6 @@ export const AddCourse = () => {
     }
   }, [editCourseId, location.state]);
 
-  /* =========================
-     HANDLERS
-     ========================= */
   const handleCourseChange = (e) => {
     const { name, value } = e.target;
 
@@ -138,14 +132,11 @@ export const AddCourse = () => {
   const handleFileUpload = async (file, fieldName) => {
     if (!file) return;
 
-    // OPTIONAL: size check
     if (file.size > 100 * 1024 * 1024) {
       alert("File too large (max 100MB)");
       return;
     }
 
-    // TEMP: if you're not uploading yet, just simulate
-    // (prevents crash and keeps flow working)
     setUploading(true);
 
     setTimeout(() => {
@@ -160,9 +151,6 @@ export const AddCourse = () => {
   };
 
 
-  /* =========================
-     SUBMIT COURSE
-     ========================= */
   const handleSubmit = async (statusOverride) => {
     if (!auth.currentUser) return;
 
@@ -226,9 +214,6 @@ export const AddCourse = () => {
     }
   };
 
-  /* =========================
-     EXPOSE ONLY LOGIC
-     ========================= */
   return (
     <AddCourseView
       step={step}

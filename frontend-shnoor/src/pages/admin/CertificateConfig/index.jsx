@@ -12,17 +12,8 @@ const CertificateConfig = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  /* =========================
-     FETCH CONFIG
-  ========================= */
-  useEffect(() => {
-    fetchConfig();
-  }, []);
-
   const fetchConfig = async () => {
     try {
-      setLoading(true);
-
       // ⛳ TEMP MOCK (replace with real API later)
       setTimeout(() => {
         setConfig({
@@ -44,6 +35,14 @@ const CertificateConfig = () => {
       setLoading(false);
     }
   };
+
+  /* =========================
+     FETCH CONFIG
+  ========================= */
+  useEffect(() => {
+    setLoading(true);
+    fetchConfig();
+  }, []);
 
   /* =========================
      UPDATE FIELDS

@@ -13,7 +13,7 @@ const AssignCourse = () => {
   const [selectedCourses, setSelectedCourses] = useState([]);
 
   const [searchStudent, setSearchStudent] = useState("");
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false); // NEW
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   /* =========================
      FETCH STUDENTS + COURSES
@@ -80,7 +80,7 @@ const AssignCourse = () => {
 
       setSelectedStudents([]);
       setSelectedCourses([]);
-      setShowSuccessPopup(true); // NEW
+      setShowSuccessPopup(true);
     } catch (err) {
       console.error("Assign course error:", err);
       throw err;
@@ -110,8 +110,8 @@ const AssignCourse = () => {
       toggleCourse={toggleCourse}
 
       handleAssign={handleAssign}
-      showSuccessPopup={showSuccessPopup} // NEW
-      setShowSuccessPopup={setShowSuccessPopup} // NEW
+      showSuccessPopup={showSuccessPopup}
+      setShowSuccessPopup={setShowSuccessPopup}
     />
   );
 };

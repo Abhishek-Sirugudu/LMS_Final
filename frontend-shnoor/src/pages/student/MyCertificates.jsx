@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { Trophy, Award, Lock, Download, Share2, Printer } from 'lucide-react';
 import { auth } from '../../auth/firebase';
-import '../../styles/Dashboard.css';
 
 const MyCertificates = () => {
     const { studentName, xp } = useOutletContext();
@@ -53,47 +52,48 @@ const MyCertificates = () => {
 
     if (selectedCert) {
         return (
-            <div className="certificate-view-container">
+            <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 overflow-y-auto p-4 print:p-0 print:bg-white print:fixed print:inset-0">
                 <style>{`
                     @media print {
                         .sidebar, .top-bar, .no-print { display: none !important; }
                         .dashboard-container { display: block !important; margin: 0 !important; padding: 0 !important; }
                         .main-content { margin: 0 !important; padding: 0 !important; }
-                        .certificate-paper { box-shadow: none !important; border: none !important; width: 100% !important; height: 100vh !important; }
+                        @page { size: landscape; margin: 0; }
                     }
                 `}</style>
-                <div className="no-print" style={{ marginBottom: '20px' }}>
-                    <button onClick={() => setSelectedCert(null)} className="btn-secondary" style={{ marginRight: '10px' }}>Back</button>
-                    <button onClick={handlePrint} className="btn-primary"><Printer size={16} /> Print / Download PDF</button>
-                </div>
 
-                <div className="certificate-paper" style={{
-                    width: '800px', height: '600px', padding: '40px', background: '#fff',
-                    border: '10px double #003366', margin: 'auto', textAlign: 'center', position: 'relative',
-                    fontFamily: 'Georgia, serif', color: '#1f2937'
-                }}>
-                    <div style={{ border: '2px solid #003366', height: '100%', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                        <h1 style={{ fontSize: '3rem', color: '#003366', marginBottom: '10px', textTransform: 'uppercase' }}>Certificate</h1>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 'normal', color: '#374151', marginBottom: '30px' }}>of Achievement</h2>
+                <div className="w-full max-w-4xl">
+                    <div className="no-print mb-6 flex justify-between items-center bg-white p-4 rounded-xl shadow-sm">
+                        <button onClick={() => setSelectedCert(null)} className="btn-student-secondary w-auto px-6">Back</button>
+                        <button onClick={handlePrint} className="btn-student-primary w-auto px-6 flex items-center gap-2">
+                            <Printer size={16} /> Print / Download PDF
+                        </button>
+                    </div>
 
-                        <p style={{ fontSize: '1.2rem', marginBottom: '10px' }}>This is to certify that</p>
-                        <h3 style={{ fontSize: '2.5rem', borderBottom: '2px solid #ccc', paddingBottom: '10px', marginBottom: '20px', minWidth: '400px' }}>
-                            {studentName}
-                        </h3>
+                    <div className="bg-white w-full max-w-[800px] mx-auto aspect-[1.414/1] p-10 border-[10px] border-double border-primary-900 relative text-center text-slate-800 font-serif shadow-2xl print:shadow-none print:w-full print:h-full print:border-none">
+                        <div className="border-2 border-primary-900 h-full p-8 flex flex-col justify-center items-center">
+                            <h1 className="text-5xl text-primary-900 uppercase tracking-widest mb-2 font-bold">Certificate</h1>
+                            <h2 className="text-2xl text-slate-600 font-normal mb-8">of Achievement</h2>
 
-                        <p style={{ fontSize: '1.2rem', marginBottom: '10px' }}>has successfully completed the course</p>
-                        <h3 style={{ fontSize: '2rem', color: '#003366', marginBottom: '40px' }}>{selectedCert.course}</h3>
+                            <p className="text-xl mb-2 italic">This is to certify that</p>
+                            <h3 className="text-4xl border-b-2 border-slate-300 pb-2 mb-6 min-w-[400px] font-bold text-primary-900">
+                                {studentName}
+                            </h3>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '80%', marginTop: '50px' }}>
-                            <div style={{ textAlign: 'center' }}>
-                                <p style={{ borderTop: '1px solid #000', paddingTop: '5px', width: '200px', margin: '0 auto' }}>Date: {selectedCert.date}</p>
-                            </div>
-                            <div style={{ textAlign: 'center' }}>
-                                <img src="https://via.placeholder.com/100x50?text=NASCOM" alt="Logo" style={{ opacity: 0.5 }} />
-                                <p style={{ fontSize: '0.8rem', marginTop: '5px' }}>NASCOM Certified</p>
-                            </div>
-                            <div style={{ textAlign: 'center' }}>
-                                <p style={{ borderTop: '1px solid #000', paddingTop: '5px', width: '200px', margin: '0 auto' }}>Signature</p>
+                            <p className="text-xl mb-2 italic">has successfully completed the course</p>
+                            <h3 className="text-3xl text-primary-900 mb-10 font-bold">{selectedCert.course}</h3>
+
+                            <div className="flex justify-between w-[90%] mt-12">
+                                <div className="text-center">
+                                    <p className="border-t border-slate-900 pt-2 w-48 mx-auto font-medium">Date: {selectedCert.date}</p>
+                                </div>
+                                <div className="text-center opacity-70">
+                                    <Award size={40} className="mx-auto text-primary-900 mb-1" />
+                                    <p className="text-xs uppercase tracking-wider font-bold">SHNOOR Certified</p>
+                                </div>
+                                <div className="text-center">
+                                    <p className="border-t border-slate-900 pt-2 w-48 mx-auto font-medium">Signature</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -104,51 +104,46 @@ const MyCertificates = () => {
 
     return (
         <div>
-            <div className="student-page-header">
-                <h3>My Achievements</h3>
-                <div style={{ background: '#fef3c7', padding: '8px 16px', borderRadius: '20px', color: '#b45309', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="student-page-header mb-8">
+                <h3 className="text-2xl font-bold text-primary-900">My Achievements</h3>
+                <div className="bg-amber-100 px-4 py-2 rounded-full text-amber-700 font-bold flex items-center gap-2 text-sm shadow-sm">
                     <Trophy size={16} /> {xp} XP Earned
                 </div>
             </div>
 
-            <h4 style={{ margin: '0 0 15px 0', color: '#374151' }}>Course Certificates</h4>
+            <h4 className="text-lg font-bold text-primary-900 mb-4">Course Certificates</h4>
 
             {certificates.length === 0 ? (
-                <p style={{ color: '#6b7280' }}>You haven't earned any certificates yet. Complete a course to get certified!</p>
+                <div className="text-center py-12 bg-slate-50 rounded-xl border border-dashed border-slate-300">
+                    <Award size={48} className="mx-auto text-slate-300 mb-4" />
+                    <p className="text-slate-500 font-medium">You haven't earned any certificates yet.</p>
+                    <p className="text-sm text-slate-400">Complete a course to get certified!</p>
+                </div>
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '25px' }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {certificates.map(cert => (
-                        <div key={cert.id} style={{ background: 'white', borderRadius: '10px', overflow: 'hidden', border: '1px solid #e5e7eb' }}>
-                            <div style={{
-                                height: '180px',
-                                background: cert.previewColor,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                position: 'relative'
-                            }}>
-                                <div style={{ textAlign: 'center', color: 'white' }}>
-                                    <Award size={50} style={{ marginBottom: '10px', color: '#fbbf24' }} />
-                                    <div style={{ fontFamily: 'serif', fontSize: '1.2rem', letterSpacing: '1px' }}>CERTIFICATE</div>
-                                    <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>View Details</div>
+                        <div key={cert.id} className="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-shadow group">
+                            <div className="h-44 relative flex items-center justify-center p-6" style={{ backgroundColor: cert.previewColor }}>
+                                <div className="text-center text-white">
+                                    <Award size={48} className="mb-2 mx-auto text-yellow-300 drop-shadow-md" />
+                                    <div className="font-serif text-xl tracking-widest font-bold">CERTIFICATE</div>
+                                    <div className="text-xs opacity-90 mt-1 font-medium">View Details</div>
                                 </div>
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors cursor-pointer" onClick={() => setSelectedCert(cert)}></div>
                             </div>
 
-                            <div style={{ padding: '20px' }}>
-                                <h4 style={{ margin: '0 0 5px 0', color: '#111827' }}>{cert.course}</h4>
-                                <p style={{ margin: '0 0 15px 0', fontSize: '0.85rem', color: '#6b7280' }}>
+                            <div className="p-5">
+                                <h4 className="font-bold text-primary-900 mb-1 truncate">{cert.course}</h4>
+                                <p className="text-xs text-slate-500 mb-4 font-medium flex items-center gap-1">
                                     Issued on {cert.date}
                                 </p>
 
-                                <div style={{ display: 'flex', gap: '10px' }}>
-                                    <button
-                                        className="btn-primary"
-                                        style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
-                                        onClick={() => setSelectedCert(cert)}
-                                    >
-                                        <Download size={16} /> View / Print
-                                    </button>
-                                </div>
+                                <button
+                                    className="btn-student-primary flex items-center justify-center gap-2"
+                                    onClick={() => setSelectedCert(cert)}
+                                >
+                                    <Download size={16} /> View / Print
+                                </button>
                             </div>
                         </div>
                     ))}
