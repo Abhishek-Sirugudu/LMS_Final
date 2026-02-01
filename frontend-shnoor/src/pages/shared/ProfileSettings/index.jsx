@@ -41,17 +41,17 @@ const ProfileSettings = () => {
       });
 
       setUserData({
-        displayName: res.data.name || "",
+        displayName: res.data.displayName || auth.currentUser.displayName || "",
         email: res.data.email || auth.currentUser.email || "",
         role: res.data.role || "User",
         bio: res.data.bio || "",
         headline: res.data.headline || "",
         linkedin: res.data.linkedin || "",
         github: res.data.github || "",
-        photoURL: res.data.photo_url || auth.currentUser.photoURL || "",
+        photoURL: res.data.photoURL || auth.currentUser.photoURL || "",
       });
 
-      setPreviewUrl(res.data.photo_url || auth.currentUser.photoURL || "");
+      setPreviewUrl(res.data.photoURL || auth.currentUser.photoURL || "");
     } catch (error) {
       console.error("Error loading profile:", error);
     } finally {

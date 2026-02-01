@@ -304,10 +304,10 @@ const ExamBuilderView = ({
                                                                         newOpts[i] = e.target.value;
                                                                         updateQuestion(q.id, 'options', newOpts);
                                                                     }}
-                                                                    className={`w-full pl-12 pr-4 py-3 border rounded-md outline-none transition-all ${q.correctAnswer === opt && opt !== '' ? 'border-emerald-500 bg-emerald-50/30 ring-1 ring-emerald-500/20' : 'bg-white border-slate-200 focus:border-indigo-500'
+                                                                    className={`w-full pl-12 pr-4 py-3 border rounded-md outline-none transition-all ${q.correctAnswerIndex === i ? 'border-emerald-500 bg-emerald-50/30 ring-1 ring-emerald-500/20' : 'bg-white border-slate-200 focus:border-indigo-500'
                                                                         }`}
                                                                 />
-                                                                {q.correctAnswer === opt && opt !== '' && (
+                                                                {q.correctAnswerIndex === i && (
                                                                     <CheckCircle size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500" />
                                                                 )}
                                                             </div>
@@ -322,8 +322,8 @@ const ExamBuilderView = ({
                                                                     <input
                                                                         type="radio"
                                                                         name={`correct-${q.id}`}
-                                                                        checked={q.correctAnswer === opt && opt !== ''}
-                                                                        onChange={() => updateQuestion(q.id, 'correctAnswer', opt)}
+                                                                        checked={q.correctAnswerIndex === i}
+                                                                        onChange={() => updateQuestion(q.id, 'correctAnswerIndex', i)}
                                                                         className="text-indigo-600 focus:ring-indigo-500 cursor-pointer"
                                                                     />
                                                                     <span className="text-sm font-medium text-indigo-900">Option {String.fromCharCode(65 + i)}</span>

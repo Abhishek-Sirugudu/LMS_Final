@@ -1,46 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Filter, Calendar } from "lucide-react";
 import ContestCard from "../../../components/contest/ContestCard";
+import api from "../../../api/axios";
 
 const WeeklyContest = () => {
     const [activeTab, setActiveTab] = useState("active");
     const [searchQuery, setSearchQuery] = useState("");
 
-    // TODO: Backend integration needed here to fetch contests
-    const mockContests = [
-        {
-            id: 1,
-            title: "Weekly Frontend Challenge: Dashboard UI",
-            description:
-                "Build a responsive analytics dashboard using React and Tailwind CSS. Focus on component reusability and data visualization.",
-            startTime: "Oct 25, 2024",
-            endTime: "Oct 27, 2024",
-            status: "active",
-            entryFee: 0,
-        },
-        {
-            id: 2,
-            title: "Algorithm Master: Array Manipulation",
-            description:
-                "Solve 5 complex algorithmic problems focused on array optimization and time complexity. Optimize your code for the best performance.",
-            startTime: "Nov 02, 2024",
-            endTime: "Nov 04, 2024",
-            status: "upcoming",
-            entryFee: 0,
-        },
-        {
-            id: 3,
-            title: "Fullstack Auth Implementation",
-            description:
-                "Implement a secure authentication flow using JWT. Include refresh tokens, password reset, and protected routes.",
-            startTime: "Oct 15, 2024",
-            endTime: "Oct 17, 2024",
-            status: "ended",
-            entryFee: 10,
-        },
-    ];
+    // Backend integration: Contests are fetched from /api/contests
+    const [contests, setContests] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const filteredContests = mockContests.filter((contest) => {
+    useEffect(() => {
+        const fetchContests = async () => {
+            try {
+                const res = await api.get('/api/contests');
+                // Transform if necessary or use directly
+                const formatted = res.data.map(c => ({
+                    id: c.contest_id,
+                    title: c.title,
+                    description: c.description,
+                    startTime: new Date(c.start_time).toLocaleDateString(),
+                    endTime: new Date(c.end_time).toLocaleDateString(),
+                    status: c.is_active ? 'active' : 'ended', // Simplified status logic
+                    entryFee: 0 // Default free for now
+                }));
+                setContests(formatted);
+            } catch (err) {
+                console.error("Failed to fetch contests", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContests();
+    }, []);
+
+    const filteredContests = contests.filter((contest) => {
         const matchesTab = contest.status === activeTab;
         const matchesSearch = contest.title
             .toLowerCase()

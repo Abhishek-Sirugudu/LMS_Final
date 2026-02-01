@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ArrowLeft, Save, Calendar, PenTool, MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import api from "../../../api/axios";
 
 const CreateContest = () => {
     const navigate = useNavigate();
@@ -22,11 +23,15 @@ const CreateContest = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Submitting contest:", formData);
-        // TODO: Backend integration to save new contest
-        navigate("/instructor/contests");
+        try {
+            await api.post('/api/contests', formData);
+            navigate("/instructor/contests");
+        } catch (err) {
+            console.error(err);
+            alert("Failed to create contest");
+        }
     };
 
     return (

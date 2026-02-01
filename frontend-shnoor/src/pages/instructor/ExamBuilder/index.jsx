@@ -58,7 +58,7 @@ const ExamBuilder = () => {
           type: "mcq",
           text: "",
           options: ["", "", "", ""],
-          correctAnswer: "",
+          correctAnswerIndex: 0,
           marks: 5,
         }
         : type === "descriptive"
@@ -136,7 +136,7 @@ const ExamBuilder = () => {
           courseId: formData.courseId || null,
           validity_value: formData.courseId ? null : formData.validity_value,
           validity_unit: formData.courseId ? null : formData.validity_unit,
-          questions: formData.questions,
+          // questions array removed to save bandwidth
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -150,10 +150,12 @@ const ExamBuilder = () => {
         const order = i + 1;
 
         if (q.type === "mcq") {
+          const correctOptionText = q.options[q.correctAnswerIndex ?? 0] || q.options[0]; // Fallback to A
+
           await api.post(`/api/exams/${examId}/questions/mcq`, {
             questionText: q.text,
             options: q.options,
-            correctOption: q.correctAnswer,
+            correctOption: correctOptionText,
             marks: q.marks,
             order,
           });

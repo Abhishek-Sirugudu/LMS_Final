@@ -24,7 +24,7 @@ const StudentDashboard = () => {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await api.get("/api/student/dashboard");
+        const res = await api.get("/api/analytics/student");
 
         setEnrolledCount(res.data.enrolled_count);
 

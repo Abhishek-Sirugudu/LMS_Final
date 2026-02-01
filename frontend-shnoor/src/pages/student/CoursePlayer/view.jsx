@@ -239,9 +239,15 @@ const CoursePlayerView = ({
             })}
           </div>
 
-          <div className="p-4 bg-slate-800 border-t border-slate-700">
+          <div className="p-4 bg-slate-800 border-t border-slate-700 space-y-3">
             <button
-              className="btn-student-primary shadow-lg shadow-primary-900/20 hover:-translate-y-0.5"
+              className="w-full py-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 font-bold hover:bg-indigo-500/20 transition-all flex items-center justify-center gap-2"
+              onClick={() => navigate(`/student/course/${courseId}/assignments`)}
+            >
+              <FileText size={16} /> View Assignments
+            </button>
+            <button
+              className="btn-student-primary shadow-lg shadow-primary-900/20 hover:-translate-y-0.5 w-full"
               onClick={() => navigate(`/student/exam/final_${courseId}`)}
             >
               Take Final Exam

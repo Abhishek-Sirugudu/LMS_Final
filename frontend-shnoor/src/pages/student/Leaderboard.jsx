@@ -3,6 +3,7 @@ import { Trophy, Medal, Crown, User } from 'lucide-react';
 import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '../../auth/firebase';
 import { getRank } from '../../utils/gamification.js';
+import api from '../../api/axios';
 
 
 const Leaderboard = () => {
@@ -11,39 +12,12 @@ const Leaderboard = () => {
 
     useEffect(() => {
         const fetchLeaderboard = async () => {
-            let fetchedUsers = [];
             try {
-                const usersRef = collection(db, "users");
-                const q = query(
-                    usersRef,
-                    where("role", "==", "student"),
-                    orderBy("xp", "desc"),
-                    limit(10)
-                );
-
-                const snapshot = await getDocs(q);
-                fetchedUsers = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-
+                const res = await api.get("/api/gamification/leaderboard");
+                setLeaders(res.data);
             } catch (error) {
-                console.warn("Leaderboard fetch failed (likely missing index), using mock data:", error);
+                console.warn("Leaderboard fetch failed", error);
             } finally {
-                if (fetchedUsers.length < 5) {
-                    const bots = [
-                        { id: 'bot1', displayName: 'Alice Bot', xp: 1250, role: 'student' },
-                        { id: 'bot2', displayName: 'Bob Bot', xp: 980, role: 'student' },
-                        { id: 'bot3', displayName: 'Charlie Bot', xp: 850, role: 'student' },
-                        { id: 'bot4', displayName: 'Diana Bot', xp: 720, role: 'student' },
-                        { id: 'bot5', displayName: 'Evan Bot', xp: 500, role: 'student' },
-                        { id: 'bot6', displayName: 'Frank Bot', xp: 450, role: 'student' },
-                        { id: 'bot7', displayName: 'Grace Bot', xp: 300, role: 'student' },
-                    ];
-                    fetchedUsers = [...fetchedUsers, ...bots].sort((a, b) => b.xp - a.xp).slice(0, 10);
-                }
-
-                setLeaders(fetchedUsers);
                 setLoading(false);
             }
         };

@@ -7,7 +7,7 @@ import LoginView from "./view";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { userData, loading: authLoading } = useAuth();
+  const { userData, loading: authLoading, isSyncing } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,6 +33,13 @@ const Login = () => {
       else navigate("/student/dashboard");
     }
   }, [userData, authLoading, navigate]);
+
+  // Reset loading state when AuthContext finishes processing (using isSyncing)
+  useEffect(() => {
+    if (!isSyncing) {
+      setLoading(false);
+    }
+  }, [isSyncing]);
 
   const handleLogin = async (e) => {
     if (e && e.preventDefault) {

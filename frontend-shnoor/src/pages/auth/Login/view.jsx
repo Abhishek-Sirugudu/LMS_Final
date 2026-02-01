@@ -74,7 +74,7 @@ const LoginView = ({
                             </div>
                         </div>
                         <h1 className="text-2xl font-bold text-primary-900 tracking-tight mb-2">System Login</h1>
-                        <p className="text-slate-500">Authorize access to your dashboard.</p>
+                        <p className="text-slate-500">Sign in to your dashboard.</p>
                     </div>
 
                     {/* Error Message */}
@@ -144,10 +144,10 @@ const LoginView = ({
                         >
                             {loading ? (
                                 <span className="flex items-center gap-2 text-sm">
-                                    Authorizing...
+                                    Logging in...
                                 </span>
                             ) : (
-                                <span className="text-sm">Authorize Access</span>
+                                <span className="text-sm">Login</span>
                             )}
                         </button>
 

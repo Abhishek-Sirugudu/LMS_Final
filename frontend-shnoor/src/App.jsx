@@ -40,6 +40,7 @@ import CourseDetail from "./pages/student/CourseDetail/index";
 import ManageUsers from "./pages/admin/ManageUsers";
 import Suspended from "./pages/auth/Suspended";
 import PracticeSession from "./pages/student/PracticeSession";
+import PracticeList from "./pages/student/PracticeList";
 import Landing from "./pages/Landing";
 import ProfileSettings from "./pages/shared/ProfileSettings";
 import StudentExams from "./pages/student/StudentExams";
@@ -51,6 +52,10 @@ import Leaderboard from './pages/student/Leaderboard';
 import { SocketProvider } from './context/SocketContext';
 import InstructorChat from './pages/instructor/InstructorChat';
 import StudentChat from './pages/student/StudentChat';
+import AssignmentBuilder from "./pages/instructor/AssignmentBuilder";
+import InstructorAssignments from "./pages/instructor/InstructorAssignments";
+import SubmissionGrader from "./pages/instructor/SubmissionGrader";
+import StudentAssignments from "./pages/student/StudentAssignments";
 
 function App() {
   return (
@@ -102,6 +107,9 @@ function App() {
               <Route path="performance" element={<StudentPerformance />} />
               <Route path="chat" element={<InstructorChat />} />
               <Route path="settings" element={<ProfileSettings />} />
+              <Route path="course/:courseId/assignments" element={<InstructorAssignments />} />
+              <Route path="course/:courseId/assignments/new" element={<AssignmentBuilder />} />
+              <Route path="assignment/:assignmentId/submissions" element={<SubmissionGrader />} />
             </Route>
 
             <Route
@@ -121,6 +129,7 @@ function App() {
                 path="practice/session/:challengeId"
                 element={<PracticeSession />}
               />
+              <Route path="practice" element={<PracticeList />} />
               <Route path="exams" element={<StudentExams />} />
               <Route path="exam/:examId" element={<ExamRunner />} />
               <Route path="contests" element={<WeeklyContest />} />
@@ -129,6 +138,7 @@ function App() {
               <Route path="certificate" element={<MyCertificates />} />
               <Route path="leaderboard" element={<Leaderboard />} />
               <Route path="chat" element={<StudentChat />} />
+              <Route path="course/:courseId/assignments" element={<StudentAssignments />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

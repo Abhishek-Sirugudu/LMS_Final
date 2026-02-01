@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { Trophy, Award, Lock, Download, Share2, Printer } from 'lucide-react';
 import { auth } from '../../auth/firebase';
+import api from '../../api/axios';
 
 const MyCertificates = () => {
     const { studentName, xp } = useOutletContext();
@@ -13,30 +14,14 @@ const MyCertificates = () => {
         const fetchCertificates = async () => {
             if (!auth.currentUser) return;
             try {
-                setTimeout(() => {
-                    const mockCerts = [
-                        {
-                            id: 'c1',
-                            course: 'Introduction to React',
-                            date: new Date().toLocaleDateString(),
-                            score: 95,
-                            status: 'Unlocked',
-                            previewColor: '#003366'
-                        },
-                        {
-                            id: 'c2',
-                            course: 'Advanced JavaScript',
-                            date: new Date().toLocaleDateString(),
-                            score: 88,
-                            status: 'Unlocked',
-                            previewColor: '#059669'
-                        }
-                    ];
-                    setCertificates(mockCerts);
-                    setLoading(false);
-                }, 800);
+                const token = await auth.currentUser.getIdToken(true);
+                const res = await api.get("/api/gamification/certificates", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setCertificates(res.data);
             } catch (error) {
                 console.error("Error fetching certificates:", error);
+            } finally {
                 setLoading(false);
             }
         };

@@ -145,24 +145,64 @@ export const submitExam = async (req, res) => {
     }
 
     /* =========================
-       2️⃣ SAVE RAW SUBMISSION
-       (NO EVALUATION HERE)
+       2️⃣ FETCH CORRECT ANSWERS
+    ========================= */
+    const questionsRes = await pool.query(
+      `
+      SELECT
+        q.question_id,
+        q.question_type,
+        q.marks,
+        o.option_text AS correct_answer,
+        q.exam_id
+      FROM exam_questions q
+      LEFT JOIN exam_mcq_options o
+        ON o.question_id = q.question_id
+       AND o.is_correct = true
+      WHERE q.exam_id = $1
+      `,
+      [examId]
+    );
+
+    let score = 0;
+    let totalMarks = 0;
+    const questions = questionsRes.rows;
+    const passPercentage = 60; // Default or fetch from exam
+
+    questions.forEach((q) => {
+      totalMarks += q.marks || 0;
+
+      // Simple textual match for MCQ
+      // For coding/descriptive, this logic would need expansion (manual grading usually)
+      if (q.question_type === 'mcq' && answers[q.question_id] === q.correct_answer) {
+        score += q.marks;
+      }
+    });
+
+    const percentage = totalMarks === 0 ? 0 : Math.round((score / totalMarks) * 100);
+    const hasPassed = percentage >= passPercentage;
+    const status = hasPassed ? 'passed' : 'failed';
+
+    /* =========================
+       3️⃣ SAVE SUBMISSION WITH SCORE
     ========================= */
     await pool.query(
       `
       INSERT INTO exam_submissions
-        (exam_id, student_id, answers, status, submitted_at)
-      VALUES ($1, $2, $3, 'SUBMITTED', NOW())
+        (exam_id, student_id, answers, score, status, submitted_at)
+      VALUES ($1, $2, $3, $4, $5, NOW())
       `,
-      [examId, studentId, answers]
+      [examId, studentId, answers, percentage, status]
     );
 
     /* =========================
-       3️⃣ RESPONSE
+       4️⃣ RESPONSE
     ========================= */
     return res.status(200).json({
       message: "Exam submitted successfully",
-      status: "SUBMITTED",
+      status: status,
+      percentage: percentage,
+      passed: hasPassed
     });
 
   } catch (err) {

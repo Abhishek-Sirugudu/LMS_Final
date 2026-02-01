@@ -138,16 +138,44 @@ export const AddCourse = () => {
     }
 
     setUploading(true);
+    setUploadProgress(10); // Start progress
 
-    setTimeout(() => {
-      const fakeUrl = URL.createObjectURL(file);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Simulate progress or use axios onUploadProgress
+      const interval = setInterval(() => {
+        setUploadProgress(prev => Math.min(prev + 10, 90));
+      }, 200);
+
+      const res = await api.post('/api/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      clearInterval(interval);
+      setUploadProgress(100);
+
+      const realUrl = res.data.file_url;
+      console.log(`Uploaded ${fieldName}:`, realUrl);
+
       setModuleForm((prev) => ({
         ...prev,
-        [fieldName]: fakeUrl,
+        [fieldName]: realUrl,
       }));
+
+      // If it's the main thumbnail, update courseData too (logic slightly differs based on fieldName)
+      if (fieldName === 'thumbnail') {
+        setCourseData(prev => ({ ...prev, thumbnail: realUrl }));
+      }
+
+    } catch (err) {
+      console.error("Upload failed:", err);
+      alert("File upload failed. Please try again.");
+      setUploadProgress(0);
+    } finally {
       setUploading(false);
-      setUploadProgress(100);
-    }, 800);
+    }
   };
 
 
@@ -168,6 +196,7 @@ export const AddCourse = () => {
           title: courseData.title,
           description: courseData.description,
           category: finalCategory,
+          thumbnail_url: courseData.thumbnail || null,
           difficulty: courseData.level,
           status: statusOverride,
           validity_value: courseData.validity_value

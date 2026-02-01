@@ -9,30 +9,50 @@ import {
     CheckCircle2,
     ArrowLeft
 } from "lucide-react";
+import api from "../../../api/axios";
 import Leaderboard from "../../../components/contest/Leaderboard";
 
 const ContestDetail = () => {
     const { contestId } = useParams();
     const navigate = useNavigate();
 
-    // TODO: Backend integration needed here to fetch contest details by ID
-    const contest = {
-        id: contestId,
-        title: "Weekly Frontend Challenge: Dashboard UI",
-        description:
-            "Join our weekly frontend challenge to build a responsive analytics dashboard using React and Tailwind CSS. The goal is to create a pixel-perfect implementation of the provided design mockups with focus on component reusability, responsive behavior, and data visualization best practices.",
-        startTime: "Oct 25, 2024",
-        endTime: "Oct 27, 2024",
-        status: "active",
-        participants: 142,
-        rules: [
-            "Use React and Tailwind CSS only.",
-            "No third-party UI libraries allowing (e.g. MUI, Chakra).",
-            "Submission must be deployed (Vercel/Netlify).",
-            "Source code must be public on GitHub.",
-            "Deadline is strict. No late submissions.",
-        ],
-    };
+    // Backend integration: Contest details fetched from /api/contests/:id
+    const [contest, setContest] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContest = async () => {
+            try {
+                const res = await api.get(`/api/contests/${contestId}`);
+                const c = res.data;
+                // Backend fields might need mapping if snake_case
+                setContest({
+                    id: c.contest_id,
+                    title: c.title,
+                    description: c.description || "No description provided.",
+                    startTime: new Date(c.start_time).toLocaleDateString(),
+                    endTime: new Date(c.end_time).toLocaleDateString(),
+                    status: c.is_active ? 'active' : 'ended',
+                    participants: 0, // Placeholder
+                    rules: [
+                        "Use React and Tailwind CSS only.",
+                        "No third-party UI libraries allowing (e.g. MUI, Chakra).",
+                        "Submission must be deployed (Vercel/Netlify).",
+                        "Source code must be public on GitHub.",
+                        "Deadline is strict. No late submissions.",
+                    ],
+                });
+            } catch (err) {
+                console.error("Failed to fetch contest detail", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContest();
+    }, [contestId]);
+
+    if (loading) return <div className="p-8 text-center text-slate-500">Loading details...</div>;
+    if (!contest) return <div className="p-8 text-center text-slate-500">Contest not found.</div>;
 
     return (
         <div className="max-w-6xl mx-auto space-y-8">

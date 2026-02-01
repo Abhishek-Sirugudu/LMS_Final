@@ -39,12 +39,16 @@ export const addCourse = async (req, res) => {
         status,
         validity_value,
         validity_unit,
-        expires_at
+        expires_at,
+        is_paid,
+        price,
+        scheduled_at
       )
       VALUES
       (
         $1, $2, $3, $4, $5, $6, $7, $8, $9,
-        ${expiresAt ? expiresAt : "NULL"}
+        ${expiresAt ? expiresAt : "NULL"},
+        $10, $11, $12
       )
       RETURNING *
     `;
@@ -59,6 +63,9 @@ export const addCourse = async (req, res) => {
       status === "pending" ? "pending" : "draft",
       validity_value || null,
       validity_unit || null,
+      req.body.is_paid || false,
+      req.body.price || 0,
+      req.body.scheduled_at || null,
     ];
 
     const result = await pool.query(query, values);

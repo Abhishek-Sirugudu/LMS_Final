@@ -17,21 +17,12 @@ export const InstructorDashboard = () => {
     const fetchDashboardStats = async () => {
       try {
         setLoading(true);
-        const token = await auth.currentUser.getIdToken(true);
-
-        const [courseRes, studentRes] = await Promise.all([
-          api.get("/api/courses/instructor/stats", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          api.get("/api/assignments/instructor/students/count", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
+        const res = await api.get("/api/analytics/instructor");
 
         setStats({
-          myCourses: Number(courseRes.data.total_courses),
-          totalStudents: Number(studentRes.data.total_students),
-          avgRating: 4.8,
+          myCourses: Number(res.data.courses),
+          totalStudents: Number(res.data.students),
+          avgRating: Number(res.data.rating),
         });
       } catch (err) {
         console.error("Dashboard stats error:", err);

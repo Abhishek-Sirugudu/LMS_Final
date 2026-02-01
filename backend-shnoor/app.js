@@ -13,7 +13,15 @@ import studentCoursesRoutes from "./routes/studentCourses.routes.js";
 import examRoutes from "./routes/exam.routes.js";
 import studentExamRoutes from "./routes/studentExam.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
+import homeworkRoutes from "./routes/homework.routes.js";
+import uploadRoutes from "./routes/upload.routes.js";
+import contestRoutes from "./routes/contest.routes.js";
+import analyticsRoutes from "./routes/analytics.routes.js";
+import gamificationRoutes from "./routes/gamification.routes.js";
+import practiceRoutes from "./routes/practice.routes.js";
+import { verifyPracticeSchema } from "./controllers/practice.controller.js";
 import { verifyChatSchema } from "./controllers/chat.controller.js";
+import { verifyContestSchema } from "./controllers/contest.controller.js";
 import http from "http";
 import { Server } from "socket.io";
 
@@ -43,13 +51,19 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/courses", coursesRoutes);
 app.use("/api", moduleRoutes);
-app.use("/api/assignments", assignmentsRoutes);
+app.use("/api/assignments", assignmentsRoutes); // Handles Course/Enrollment assignments
+app.use("/api/homework", homeworkRoutes); // Handles Homework Assignments
 app.use("/api/admin", adminRoutes);
 app.use("/api/student", studentCoursesRoutes);
 app.use("/api/exams", examRoutes);
 app.use("/api/exams", examRoutes);
 app.use("/api/student/exams", studentExamRoutes);
 app.use("/api/chats", chatRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api/contests", contestRoutes);
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/gamification", gamificationRoutes);
+app.use("/api/practice", practiceRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running 🚀");
@@ -145,6 +159,8 @@ pool.query("SELECT NOW()")
 
     // Fix any missing chat columns
     await verifyChatSchema();
+    await verifyContestSchema();
+    await verifyPracticeSchema();
 
     server.listen(PORT, () => {
       console.log(`✅ Server running on port ${PORT}`);

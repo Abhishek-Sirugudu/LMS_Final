@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { auth } from '../../auth/firebase';
+import api from '../../api/axios';
 import ProblemDescription from '../../components/exam/ProblemDescription';
 import CodeEditorPanel from '../../components/exam/CodeEditorPanel';
 
@@ -75,18 +77,35 @@ const PracticeSession = ({ question: propQuestion, value, onChange }) => {
 
     useEffect(() => {
         if (!isEmbedded) {
-            const fetchQuestion = () => {
-                const data = getStudentData();
-                const found = data.practiceChallenges?.find(c => c.id === challengeId);
-                if (found) {
-                    setFetchedQuestion(found);
-                    let initialCode = found.starterCode;
-                    if (!initialCode) {
-                        initialCode = languageTemplates['javascript'];
+            const fetchQuestion = async () => {
+                try {
+                    const token = await auth.currentUser.getIdToken(true);
+                    const res = await api.get(`/api/practice/${challengeId}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    const found = res.data;
+
+                    if (found) {
+                        // Backend fields might be snake_case, frontend expects camelCase or specific props
+                        const challenge = {
+                            ...found,
+                            id: found.challenge_id || found.id,
+                            starterCode: found.starter_code || '',
+                            testCases: found.test_cases || []
+                        };
+                        setFetchedQuestion(challenge);
+
+                        let initialCode = challenge.starterCode;
+                        if (!initialCode) {
+                            initialCode = languageTemplates['javascript'];
+                        }
+                        setCode(initialCode);
                     }
-                    setCode(initialCode);
+                } catch (err) {
+                    console.error("Failed to load challenge", err);
+                } finally {
+                    setLoading(false);
                 }
-                setLoading(false);
             };
             fetchQuestion();
         }

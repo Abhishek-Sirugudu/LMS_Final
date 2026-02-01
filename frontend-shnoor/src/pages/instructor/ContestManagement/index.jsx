@@ -1,43 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Plus, Search, MoreVertical, Calendar, Trophy, Trash2, Edit2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import api from "../../../api/axios";
 
 const ContestManagement = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("active");
 
-    // TODO: Backend integration to fetch instructor's contests
-    const mockContests = [
-        {
-            id: 1,
-            title: "Weekly Frontend Challenge: Dashboard UI",
-            startTime: "Oct 25, 2024",
-            endTime: "Oct 27, 2024",
-            participants: 45,
-            status: "active",
-            prize: "$100",
-        },
-        {
-            id: 2,
-            title: "Algorithm Master: Array Manipulation",
-            startTime: "Nov 02, 2024",
-            endTime: "Nov 04, 2024",
-            participants: 0,
-            status: "scheduled",
-            prize: "$50",
-        },
-        {
-            id: 3,
-            title: "Previous Challenge",
-            startTime: "Oct 10, 2024",
-            endTime: "Oct 12, 2024",
-            participants: 120,
-            status: "ended",
-            prize: "$50",
-        },
-    ];
+    const [contests, setContests] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const filtered = mockContests.filter((c) =>
+    useEffect(() => {
+        const fetchContests = async () => {
+            try {
+                const res = await api.get('/api/contests');
+                setContests(res.data.map(c => ({
+                    id: c.contest_id,
+                    title: c.title,
+                    startTime: new Date(c.start_time).toLocaleDateString(),
+                    endTime: new Date(c.end_time).toLocaleDateString(),
+                    participants: 0, // Placeholder
+                    status: c.is_active ? 'active' : 'ended', // Simplified logic
+                    prize: 'N/A'
+                })));
+            } catch (err) {
+                console.error("Failed to fetch contests", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContests();
+    }, []);
+
+    const filtered = contests.filter((c) =>
         activeTab === "all" ? true : c.status === activeTab
     );
 

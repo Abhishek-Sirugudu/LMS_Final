@@ -212,6 +212,17 @@ const CourseListView = ({
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
+                              // Navigate to assignments
+                              window.location.href = `/instructor/course/${course.courses_id}/assignments`;
+                            }}
+                            className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                            title="Manage Assignments"
+                          >
+                            <FileText size={16} />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
                               onDelete(course.courses_id);
                             }}
                             disabled={course.status === "approved"}
