@@ -145,7 +145,7 @@ export const gradeSubmission = async (req, res) => {
 
         await pool.query(
             `UPDATE assignment_submissions
-             SET grade = $1, feedback = $2, status = 'graded'
+             SET grade = $1, feedback = $2, status = 'graded', graded_at = NOW()
              WHERE submission_id = $3`,
             [grade, feedback, subId]
         );
@@ -153,6 +153,42 @@ export const gradeSubmission = async (req, res) => {
         res.json({ message: "Graded successfully" });
     } catch (err) {
         console.error("Grade Error:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+/* =========================================
+   INSTRUCTOR: DELETE ASSIGNMENT
+   ========================================= */
+export const deleteAssignment = async (req, res) => {
+    try {
+        const { id: assignmentId } = req.params;
+        const instructorId = req.user.id;
+
+        // Verify ownership via assignment -> course -> instructor
+        const ownership = await pool.query(
+            `SELECT c.instructor_id FROM assignments a
+             JOIN courses c ON a.course_id = c.courses_id
+             WHERE a.assignment_id = $1`,
+            [assignmentId]
+        );
+
+        if (ownership.rowCount === 0) {
+            return res.status(404).json({ message: "Assignment not found" });
+        }
+
+        if (ownership.rows[0].instructor_id !== instructorId) {
+            return res.status(403).json({ message: "Unauthorized" });
+        }
+
+        await pool.query(
+            `DELETE FROM assignments WHERE assignment_id = $1`,
+            [assignmentId]
+        );
+
+        res.json({ message: "Assignment deleted successfully" });
+    } catch (err) {
+        console.error("Delete Assignment Error:", err);
         res.status(500).json({ message: "Server error" });
     }
 };

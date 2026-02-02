@@ -64,11 +64,14 @@ const StudentDashboardView = ({ studentName, enrolledCount, lastCourse, gamifica
                                 <div className="flex-1">
                                     <h2 className="text-xl font-bold text-primary-900 mb-2">{lastCourse.title || "Untitled Course"}</h2>
                                     <div className="w-full bg-slate-100 rounded-full h-2 mb-3">
-                                        <div className="bg-indigo-600 h-2 rounded-full" style={{ width: '65%' }}></div>
+                                        <div
+                                            className="bg-indigo-600 h-2 rounded-full"
+                                            style={{ width: `${lastCourse.progress || 0}%` }}
+                                        ></div>
                                     </div>
                                     <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-                                        <span>65% Complete</span>
-                                        <span>Module 4: Advanced Concepts</span>
+                                        <span>{lastCourse.progress || 0}% Complete</span>
+                                        <span>{lastCourse.current_module || "Continue Learning"}</span>
                                     </div>
                                 </div>
                                 <button
@@ -132,7 +135,12 @@ const StudentDashboardView = ({ studentName, enrolledCount, lastCourse, gamifica
                     <div className="bg-white border border-slate-200 rounded-lg shadow-sm">
                         <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center rounded-t-lg">
                             <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide">Recent Activity</h3>
-                            <button className="text-xs font-bold text-indigo-600 hover:underline">View All</button>
+                            <button
+                                onClick={() => navigate('/student/certificates')}
+                                className="text-xs font-bold text-indigo-600 hover:underline"
+                            >
+                                View All
+                            </button>
                         </div>
                         <div className="divide-y divide-slate-100">
                             {recentActivity.length > 0 ? (
@@ -172,6 +180,7 @@ const StudentDashboardView = ({ studentName, enrolledCount, lastCourse, gamifica
                                         course={d.course}
                                         due={new Date(d.dueDate).toLocaleDateString()}
                                         type={d.isUrgent ? 'urgent' : 'normal'}
+                                        onClick={() => navigate(d.courseId ? `/student/course/${d.courseId}` : '/student/courses')}
                                     />
                                 ))
                             ) : (
@@ -230,8 +239,11 @@ const StatCard = ({ label, value, icon, subtext, colorClass }) => (
     </div>
 );
 
-const DeadlineItem = ({ title, course, due, type }) => (
-    <div className="flex items-start gap-3 p-3 rounded-md bg-slate-50 border border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+const DeadlineItem = ({ title, course, due, type, onClick }) => (
+    <div
+        onClick={onClick}
+        className="flex items-start gap-3 p-3 rounded-md bg-slate-50 border border-slate-100 hover:border-slate-300 transition-colors cursor-pointer"
+    >
         <div className={`mt-1 w-2 h-2 rounded-full ${type === 'urgent' ? 'bg-rose-500' : 'bg-indigo-600'}`}></div>
         <div>
             <div className="text-sm font-bold text-primary-900">{title}</div>

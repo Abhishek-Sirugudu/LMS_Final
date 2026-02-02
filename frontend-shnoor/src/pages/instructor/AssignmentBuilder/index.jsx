@@ -18,9 +18,11 @@ const AssignmentBuilder = () => {
             const token = await auth.currentUser.getIdToken();
 
             await api.post('/api/homework', {
-                ...data,
-                courseId,
-                dueDate: new Date(data.dueDate).toISOString()
+                courseId: courseId,
+                title: data.title,
+                description: data.description,
+                dueDate: new Date(data.dueDate).toISOString(),
+                maxMarks: data.maxMarks
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });

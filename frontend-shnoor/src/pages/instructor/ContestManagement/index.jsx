@@ -36,6 +36,21 @@ const ContestManagement = () => {
         activeTab === "all" ? true : c.status === activeTab
     );
 
+    const handleDeleteContest = async (contestId) => {
+        if (!window.confirm('Delete this contest? This action cannot be undone.')) return;
+        try {
+            await api.delete(`/api/contests/${contestId}`);
+            setContests(prev => prev.filter(c => c.id !== contestId));
+        } catch (err) {
+            console.error('Delete contest failed:', err);
+            alert('Failed to delete contest');
+        }
+    };
+
+    const handleEditContest = (contestId) => {
+        navigate(`/instructor/contests/${contestId}/edit`);
+    };
+
     return (
         <div className="space-y-8">
             {/* Header */}
@@ -110,10 +125,18 @@ const ContestManagement = () => {
                                         <td className="px-6 py-4 text-slate-600 font-medium">{contest.prize}</td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
-                                                <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Edit">
+                                                <button
+                                                    onClick={() => handleEditContest(contest.id)}
+                                                    className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                                    title="Edit"
+                                                >
                                                     <Edit2 className="w-4 h-4" />
                                                 </button>
-                                                <button className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                                                <button
+                                                    onClick={() => handleDeleteContest(contest.id)}
+                                                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                    title="Delete"
+                                                >
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
                                             </div>

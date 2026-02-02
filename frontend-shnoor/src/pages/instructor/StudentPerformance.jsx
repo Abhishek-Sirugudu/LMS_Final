@@ -32,7 +32,7 @@ const StudentPerformance = () => {
       try {
         const token = await auth.currentUser.getIdToken(true);
 
-        const res = await api.get("/api/assignments/instructor/students", {
+        const res = await api.get("/api/analytics/instructor/students", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -150,24 +150,28 @@ const StudentPerformance = () => {
                         {student.course_title}
                       </td>
 
-                      {/* STATIC VALUES FOR NOW */}
+
+                      {/* Progress */}
                       <td className="px-6 py-4">
                         <div className="w-32 bg-slate-200 rounded-full h-1.5 overflow-hidden">
                           <div
                             className="h-full bg-indigo-600 rounded-full"
-                            style={{ width: "60%" }}
+                            style={{ width: `${student.progress || 0}%` }}
                           ></div>
                         </div>
-                        <div className="text-xs text-slate-500 mt-1 font-medium">60%</div>
+                        <div className="text-xs text-slate-500 mt-1 font-medium">{student.progress || 0}%</div>
                       </td>
 
                       <td className="px-6 py-4 text-sm">
-                        <span className="font-bold text-slate-700">80%</span>
+                        <span className="font-bold text-slate-700">{student.avg_score || 0}%</span>
                       </td>
 
                       <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                          GOOD
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${student.status === 'Excellent' ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
+                            student.status === 'At Risk' ? 'bg-rose-100 text-rose-800 border-rose-200' :
+                              'bg-blue-100 text-blue-800 border-blue-200'
+                          }`}>
+                          {student.status || 'GOOD'}
                         </span>
                       </td>
 

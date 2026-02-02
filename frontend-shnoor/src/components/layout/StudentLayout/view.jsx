@@ -57,6 +57,7 @@ const StudentLayoutView = ({
   navigate,
   location,
   photoURL,
+  setXp,
 }) => {
   return (
     <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
@@ -96,6 +97,7 @@ const StudentLayoutView = ({
               <NavItem path="exams" icon={ClipboardList} label="Exams" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
               <NavItem path="contests" icon={Trophy} label="Weekly Contests" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
               <NavItem path="certificates" icon={Award} label="Certificates" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
+              <NavItem path="leaderboard" icon={Trophy} label="Leaderboard" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
               <NavItem path="practice" icon={Code} label="Practice Arena" navigate={navigate} location={location} setIsSidebarOpen={setIsSidebarOpen} />
               <NavItem
                 path="chat"
@@ -184,7 +186,7 @@ const StudentLayoutView = ({
 
         <main className="flex-1 overflow-auto bg-slate-50 p-4 lg:p-8">
           <div className="w-full h-full">
-            <Outlet context={{ studentName, xp }} />
+            <Outlet context={{ studentName, xp, setXp }} />
           </div>
         </main>
       </div>

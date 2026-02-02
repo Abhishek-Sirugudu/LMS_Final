@@ -12,7 +12,21 @@ export const InstructorDashboard = () => {
     avgRating: 0
   });
   const [loading, setLoading] = useState(true);
-  const [userName] = useState('Instructor');
+  const [userName, setUserName] = useState('Instructor');
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await api.get('/api/users/me');
+        setUserName(res.data.full_name || 'Instructor');
+      } catch (err) {
+        console.error('Profile fetch failed:', err);
+      }
+    };
+
+    if (auth.currentUser) fetchProfile();
+  }, []);
+
   useEffect(() => {
     const fetchDashboardStats = async () => {
       try {

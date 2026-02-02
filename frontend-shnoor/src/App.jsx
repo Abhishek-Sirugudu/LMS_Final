@@ -29,6 +29,8 @@ import AddCourse from "./pages/instructor/AddCourse";
 import CourseList from "./pages/instructor/CourseList";
 import ExamBuilder from "./pages/instructor/ExamBuilder";
 import InstructorSettings from "./pages/instructor/InstructorSettings";
+import InstructorPracticeList from "./pages/instructor/PracticeList";
+import AddPractice from "./pages/instructor/AddPractice";
 
 import StudentDashboard from "./pages/student/StudentDashboard";
 import CoursePlayer from "./pages/student/CoursePlayer";
@@ -101,6 +103,8 @@ function App() {
               <Route path="dashboard" element={<InstructorDashboard />} />
               <Route path="add-course" element={<AddCourse />} />
               <Route path="courses" element={<CourseList />} />
+              <Route path="practice" element={<InstructorPracticeList />} />
+              <Route path="practice/new" element={<AddPractice />} />
               <Route path="contests" element={<ContestManagement />} />
               <Route path="contests/create" element={<CreateContest />} />
               <Route path="exams" element={<ExamBuilder />} />
@@ -135,7 +139,7 @@ function App() {
               <Route path="contests" element={<WeeklyContest />} />
               <Route path="contest/:contestId" element={<ContestDetail />} />
               <Route path="settings" element={<ProfileSettings />} />
-              <Route path="certificate" element={<MyCertificates />} />
+              <Route path="certificates" element={<MyCertificates />} />
               <Route path="leaderboard" element={<Leaderboard />} />
               <Route path="chat" element={<StudentChat />} />
               <Route path="course/:courseId/assignments" element={<StudentAssignments />} />

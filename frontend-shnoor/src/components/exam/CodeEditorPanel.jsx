@@ -101,7 +101,7 @@ const CodeEditorPanel = ({
           <select
             value={language}
             onChange={(e) => onLanguageChange?.(e.target.value)}
-            className="bg-transparent border-none text-sm font-semibold text-slate-200 focus:outline-none"
+            className="bg-[#252526] border-none text-sm font-semibold text-slate-200 focus:outline-none cursor-pointer"
           >
             <option value="javascript">JavaScript</option>
             <option value="python">Python</option>

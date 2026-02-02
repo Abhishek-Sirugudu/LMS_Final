@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from 'react-hot-toast';
 import { auth } from "../../../auth/firebase";
 import api from "../../../api/axios";
 import ExamBuilderView from "./view";
@@ -118,7 +119,7 @@ const ExamBuilder = () => {
   const handleSave = async () => {
     const error = validateForm();
     if (error) {
-      alert(error);
+      toast.error(error);
       return;
     }
 
@@ -188,11 +189,11 @@ const ExamBuilder = () => {
         }
       }
 
-      alert("Exam created successfully!");
+      toast.success("Exam created successfully!");
       navigate("/instructor/dashboard");
     } catch (err) {
       console.error("Create exam error:", err);
-      alert("Failed to save exam or questions.");
+      toast.error("Failed to save exam or questions.");
     } finally {
       setLoading(false);
     }

@@ -70,7 +70,7 @@ const ProfileSettings = () => {
   };
 
   /* =========================
-     IMAGE UPLOAD (FIREBASE STORAGE)
+     IMAGE UPLOAD (SIMULATED)
   ========================= */
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -79,22 +79,20 @@ const ProfileSettings = () => {
     setUploading(true);
 
     try {
-      const { ref, uploadBytes, getDownloadURL } =
-        await import("firebase/storage");
+      // Simulate upload delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
-      const storageRef = ref(
-        storage,
-        `profile_pictures/${auth.currentUser.uid}`,
-      );
-
-      await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(storageRef);
+      // Create local preview URL
+      const downloadURL = URL.createObjectURL(file);
 
       setPreviewUrl(downloadURL);
       setUserData((prev) => ({ ...prev, photoURL: downloadURL }));
 
-      // Update Firebase Auth photo
-      await updateProfile(auth.currentUser, { photoURL: downloadURL });
+      // Note: In a real app with storage, we would get the URL after upload.
+      // Here we just save the updated URL to the user profile if possible, 
+      // but typically we'd send the file to backend. 
+      // For now, we just update the UI state.
+
     } catch (error) {
       console.error("Image upload failed:", error);
       alert("Failed to upload image");

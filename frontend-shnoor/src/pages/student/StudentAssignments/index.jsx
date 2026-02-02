@@ -11,7 +11,7 @@ const StudentAssignments = () => {
     const [assignments, setAssignments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedAssignment, setSelectedAssignment] = useState(null); // For submit modal
-    const [submissionData, setSubmissionData] = useState({ textAnswer: '', fileUrl: '' });
+    const [submissionData, setSubmissionData] = useState({ textAnswer: '', fileUrl: '', file: null, uploadProgress: 0 });
 
     useEffect(() => {
         const fetchAssignments = async () => {
@@ -126,36 +126,65 @@ const StudentAssignments = () => {
                             <div>
                                 <label className="block text-sm font-bold text-slate-700 mb-1">Answer Text</label>
                                 <textarea
-                                    className="w-full px-3 py-2 border rounded-lg h-32"
+                                    className="w-full px-3 py-2 border rounded-lg h-32 focus:border-indigo-500 focus:ring-0 outline-none transition-all"
                                     value={submissionData.textAnswer}
                                     onChange={e => setSubmissionData({ ...submissionData, textAnswer: e.target.value })}
                                     placeholder="Type your answer here..."
                                 />
                             </div>
+
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-1">File URL (Optional)</label>
-                                <input
-                                    type="url"
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                    value={submissionData.fileUrl}
-                                    onChange={e => setSubmissionData({ ...submissionData, fileUrl: e.target.value })}
-                                    placeholder="https://drive.google.com/..."
-                                />
-                                <p className="text-xs text-slate-400 mt-1">Paste a link to your Google Drive/Dropbox file.</p>
+                                <label className="block text-sm font-bold text-slate-700 mb-1">Attach File</label>
+                                <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 flex flex-col items-center justify-center bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer relative">
+                                    <input
+                                        type="file"
+                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                        onChange={(e) => {
+                                            const file = e.target.files[0];
+                                            if (file) {
+                                                setSubmissionData({ ...submissionData, file: file });
+                                            }
+                                        }}
+                                    />
+                                    <Upload className="text-slate-400 mb-2" size={24} />
+                                    <p className="text-sm font-bold text-slate-600">
+                                        {submissionData.file ? submissionData.file.name : "Click to upload file"}
+                                    </p>
+                                    <p className="text-xs text-slate-400 mt-1">PDF, DOCX, ZIP (Max 10MB)</p>
+                                </div>
+                                {submissionData.uploadProgress > 0 && (
+                                    <div className="mt-2">
+                                        <div className="flex justify-between text-xs font-bold text-slate-500 mb-1">
+                                            <span>Uploading...</span>
+                                            <span>{submissionData.uploadProgress}%</span>
+                                        </div>
+                                        <div className="w-full bg-slate-200 rounded-full h-1.5">
+                                            <div
+                                                className="bg-indigo-600 h-1.5 rounded-full transition-all duration-300"
+                                                style={{ width: `${submissionData.uploadProgress}%` }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
+
                             <div className="flex justify-end gap-3 mt-6">
                                 <button
                                     type="button"
-                                    onClick={() => setSelectedAssignment(null)}
+                                    onClick={() => {
+                                        setSelectedAssignment(null);
+                                        setSubmissionData({ textAnswer: '', fileUrl: '', file: null, uploadProgress: 0 });
+                                    }}
                                     className="px-4 py-2 text-slate-600 font-bold hover:bg-slate-50 rounded-lg"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+                                    disabled={!submissionData.textAnswer && !submissionData.file}
+                                    className="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Submit
+                                    {submissionData.uploadProgress > 0 && submissionData.uploadProgress < 100 ? 'Uploading...' : 'Submit Assignment'}
                                 </button>
                             </div>
                         </form>

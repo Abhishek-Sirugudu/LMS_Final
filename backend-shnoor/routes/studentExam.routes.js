@@ -6,6 +6,7 @@ import roleGuard from "../middlewares/roleGuard.js";
 import {
   getStudentExams,
   getExamForAttempt,
+  getExamHistory,
   submitExam
 } from "../controllers/studentExam.controller.js";
 
@@ -18,6 +19,15 @@ router.get(
   attachUser,
   roleGuard("student", "user"),
   getStudentExams
+);
+
+// 1.5️⃣ Exam History
+router.get(
+  "/history",
+  firebaseAuth,
+  attachUser,
+  roleGuard("student", "user"),
+  getExamHistory
 );
 
 // 2️⃣ Load exam questions (WITHOUT answers)

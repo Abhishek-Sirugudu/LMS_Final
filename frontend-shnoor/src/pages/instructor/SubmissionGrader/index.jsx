@@ -85,7 +85,7 @@ const SubmissionGrader = () => {
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-full bg-slate-200 overflow-hidden">
-                                                {sub.photo_url && <img src={sub.photo_url} className="w-full h-full object-cover" />}
+                                                {sub.photo_url && <img src={sub.photo_url} alt={sub.full_name} className="w-full h-full object-cover" />}
                                             </div>
                                             <div>
                                                 <div className="font-bold text-slate-800">{sub.full_name}</div>

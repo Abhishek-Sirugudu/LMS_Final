@@ -59,6 +59,9 @@ CREATE TABLE IF NOT EXISTS courses
     validity_value integer,
     validity_unit character varying(10) COLLATE pg_catalog."default",
     expires_at timestamp without time zone,
+    is_paid boolean DEFAULT false,
+    price numeric(10,2) DEFAULT 0.00,
+    scheduled_at timestamp without time zone,
     CONSTRAINT courses_pkey PRIMARY KEY (courses_id),
     CONSTRAINT courses_instructor_id_fkey FOREIGN KEY (instructor_id)
         REFERENCES public.users (user_id) MATCH SIMPLE
@@ -366,7 +369,47 @@ WHERE email = 'admin@shnoor.com';
 
 
 
--- #19. Chats Table (Links to users)
+-- #18. Assignments Table
+CREATE TABLE IF NOT EXISTS assignments (
+    assignment_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    course_id UUID NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    due_date TIMESTAMP WITHOUT TIME ZONE,
+    max_marks INTEGER DEFAULT 100,
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    
+    CONSTRAINT assignments_course_id_fkey FOREIGN KEY (course_id)
+        REFERENCES public.courses (courses_id)
+        ON DELETE CASCADE,
+    CONSTRAINT assignments_max_marks_check CHECK (max_marks > 0)
+);
+
+-- #19. Assignment Submissions Table
+CREATE TABLE IF NOT EXISTS assignment_submissions (
+    submission_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    assignment_id UUID NOT NULL,
+    student_id UUID NOT NULL,
+    file_url TEXT,
+    text_answer TEXT,
+    status VARCHAR(20) DEFAULT 'pending',
+    grade INTEGER,
+    feedback TEXT,
+    submitted_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    graded_at TIMESTAMP WITHOUT TIME ZONE,
+    
+    CONSTRAINT assignment_submissions_assignment_id_fkey FOREIGN KEY (assignment_id)
+        REFERENCES public.assignments (assignment_id)
+        ON DELETE CASCADE,
+    CONSTRAINT assignment_submissions_student_id_fkey FOREIGN KEY (student_id)
+        REFERENCES public.users (user_id)
+        ON DELETE CASCADE,
+    CONSTRAINT unique_submission_per_assignment UNIQUE (assignment_id, student_id),
+    CONSTRAINT assignment_submissions_status_check CHECK (status IN ('pending', 'submitted', 'graded')),
+    CONSTRAINT assignment_submissions_grade_check CHECK (grade IS NULL OR grade >= 0)
+);
+
+-- #20. Chats Table (Links to users)
 CREATE TABLE IF NOT EXISTS chats (
     chat_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     instructor_id UUID NOT NULL,
@@ -383,7 +426,7 @@ CREATE TABLE IF NOT EXISTS chats (
         ON DELETE CASCADE
 );
 
--- #20. Messages Table (Links to chats, users, and files)
+-- #21. Messages Table (Links to chats, users, and files)
 CREATE TABLE IF NOT EXISTS messages (
     message_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     chat_id UUID NOT NULL,

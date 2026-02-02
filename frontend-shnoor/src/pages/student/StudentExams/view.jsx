@@ -23,6 +23,20 @@ const StudentExamsView = ({ loading, exams, navigate }) => {
         </p>
       </div>
 
+      <div className="flex gap-4 border-b border-slate-200 mb-6">
+        <button
+          className={`pb-2 text-sm font-bold border-b-2 transition-colors ${true ? 'border-primary-900 text-primary-900' : 'border-transparent text-slate-500'}`}
+        >
+          Available Exams
+        </button>
+        <button
+          className={`pb-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-colors`}
+          onClick={() => console.log('Exam history - to be implemented with tab state')}
+        >
+          My History
+        </button>
+      </div>
+
       {exams.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl text-center">
           <ClipboardList className="text-slate-300 w-16 h-16 mb-4" />

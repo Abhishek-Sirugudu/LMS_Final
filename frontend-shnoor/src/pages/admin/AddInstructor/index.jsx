@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-hot-toast';
 import { auth } from "../../../auth/firebase";
 import api from "../../../api/axios";
 import AddInstructorView from "./view";
@@ -45,7 +46,7 @@ const AddInstructor = () => {
         }
       );
 
-      alert(`Instructor "${data.fullName}" added successfully.`);
+      toast.success(`Instructor "${data.fullName}" added successfully.`);
       navigate("/admin/dashboard");
     } catch (err) {
       console.error("Error adding instructor:", err);

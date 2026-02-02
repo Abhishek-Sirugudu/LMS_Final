@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from 'react-hot-toast';
 import api from "../../../api/axios";
 import ApproveCoursesView from "./view";
 
@@ -59,7 +60,7 @@ const ApproveCourses = () => {
       closeDetails();
     } catch (err) {
       console.error("Status update failed", err);
-      alert("Failed to update course status");
+      toast.error("Failed to update course status");
     }
   };
 
@@ -68,9 +69,9 @@ const ApproveCourses = () => {
       loading={loading}
       pendingCourses={pendingCourses}
       selectedCourse={selectedCourse}
-      setSelectedCourse={selectCourse}   
+      setSelectedCourse={selectCourse}
       modules={modules}
-      handleAction={updateStatus}       
+      handleAction={updateStatus}
     />
   );
 };

@@ -98,7 +98,23 @@ const InstructorAssignments = () => {
                                     >
                                         View Submissions
                                     </button>
-                                    <button className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                                    <button
+                                        onClick={async () => {
+                                            if (!window.confirm('Delete this assignment? This cannot be undone.')) return;
+                                            try {
+                                                const token = await auth.currentUser.getIdToken();
+                                                await api.delete(`/api/homework/${a.assignment_id}`, {
+                                                    headers: { Authorization: `Bearer ${token}` }
+                                                });
+                                                setAssignments(prev => prev.filter(item => item.assignment_id !== a.assignment_id));
+                                                toast.success('Assignment deleted');
+                                            } catch (err) {
+                                                console.error('Delete failed:', err);
+                                                toast.error('Failed to delete assignment');
+                                            }
+                                        }}
+                                        className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                    >
                                         <Trash2 size={18} />
                                     </button>
                                 </div>

@@ -7,7 +7,8 @@ import {
     getAssignmentsByCourse,
     submitAssignment,
     getSubmissions,
-    gradeSubmission
+    gradeSubmission,
+    deleteAssignment
 } from "../controllers/homeworkController.js";
 
 const router = express.Router();
@@ -55,6 +56,15 @@ router.post(
     attachUser,
     roleGuard("instructor"),
     gradeSubmission
+);
+
+// Delete Assignment (Instructor)
+router.delete(
+    "/:id",
+    firebaseAuth,
+    attachUser,
+    roleGuard("instructor"),
+    deleteAssignment
 );
 
 export default router;

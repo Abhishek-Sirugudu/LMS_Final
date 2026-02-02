@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { auth } from '../../auth/firebase';
 import api from '../../api/axios';
+import { toast } from 'react-hot-toast'; // Added import
 import ProblemDescription from '../../components/exam/ProblemDescription';
 import CodeEditorPanel from '../../components/exam/CodeEditorPanel';
 
@@ -250,6 +251,25 @@ if __name__ == "__main__":
         setIsRunning(false);
     };
 
+    const handleSubmit = async () => {
+        try {
+            const token = await auth.currentUser.getIdToken(true);
+            await api.post(`/api/practice/${challengeId}/submit`, {
+                code: code,
+                language: selectedLanguage,
+                passed: consoleOutput.some(r => r.type === 'success')
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            toast.success("Solution submitted successfully!");
+            navigate('/student/practice');
+        } catch (err) {
+            console.error("Submission failed", err);
+            toast.error("Failed to submit solution.");
+        }
+    };
+
 
     if (loading) return <div className="p-8 text-center text-slate-500">Loading challenge...</div>;
     if (!question) return <div className="p-8 text-center text-slate-500">Challenge not found.</div>;
@@ -267,7 +287,7 @@ if __name__ == "__main__":
                     onLanguageChange={handleLanguageChange}
                     onCodeChange={handleCodeChange}
                     onRun={handleRun}
-                    onSubmit={isEmbedded ? null : () => { }}
+                    onSubmit={isEmbedded ? null : handleSubmit}
                     isRunning={isRunning}
                     consoleOutput={consoleOutput}
                     isEmbedded={isEmbedded}

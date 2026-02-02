@@ -140,12 +140,17 @@ const CourseDetailView = ({
                 <div className="lg:col-span-1">
                     <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden sticky top-24">
                         {/* Preview Area */}
-                        <div className="h-48 bg-primary-900 relative group cursor-pointer flex items-center justify-center">
-                            <div className="absolute inset-0 bg-indigo-600/20 group-hover:bg-indigo-600/30 transition-colors"></div>
-                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-indigo-600 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                        <div className="h-48 bg-slate-100 relative group cursor-pointer flex items-center justify-center overflow-hidden">
+                            <img
+                                src={`https://placehold.co/600x400/e2e8f0/1e293b?text=${encodeURIComponent(course.title)}`}
+                                alt="Preview"
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-indigo-900/30 group-hover:bg-indigo-900/40 transition-colors"></div>
+                            <div className="relative w-16 h-16 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-indigo-600 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
                                 <Play size={24} className="ml-1" fill="currentColor" />
                             </div>
-                            <div className="absolute bottom-4 text-white text-sm font-semibold tracking-wide drop-shadow-md">Preview Course</div>
+                            <div className="absolute bottom-4 text-white text-sm font-bold tracking-wide drop-shadow-md border border-white/30 px-3 py-1 rounded-full bg-black/20 backdrop-blur-md">Preview Course</div>
                         </div>
 
                         <div className="p-6">

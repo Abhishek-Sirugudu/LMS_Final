@@ -10,6 +10,7 @@ import {
     ArrowLeft
 } from "lucide-react";
 import api from "../../../api/axios";
+import { toast } from "react-hot-toast"; // Added import
 import Leaderboard from "../../../components/contest/Leaderboard";
 
 const ContestDetail = () => {
@@ -49,7 +50,19 @@ const ContestDetail = () => {
             }
         };
         fetchContest();
+        fetchContest();
     }, [contestId]);
+
+    const handleJoin = async () => {
+        try {
+            await api.post(`/api/contests/${contestId}/join`);
+            toast.success("Successfully joined the contest!");
+            // Optionally refresh contest details or navigate
+        } catch (err) {
+            console.error("Failed to join contest", err);
+            toast.error(err.response?.data?.message || "Failed to join contest");
+        }
+    };
 
     if (loading) return <div className="p-8 text-center text-slate-500">Loading details...</div>;
     if (!contest) return <div className="p-8 text-center text-slate-500">Contest not found.</div>;
@@ -91,7 +104,10 @@ const ContestDetail = () => {
                         </div>
 
                         <div className="flex flex-col justify-center gap-3 md:min-w-[200px]">
-                            <button className="w-full py-3 px-6 bg-primary-900 text-white font-semibold rounded-lg hover:bg-primary-800 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5">
+                            <button 
+                                onClick={handleJoin}
+                                className="w-full py-3 px-6 bg-primary-900 text-white font-semibold rounded-lg hover:bg-primary-800 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+                            >
                                 Join Contest
                             </button>
                             <p className="text-xs text-center text-slate-500">

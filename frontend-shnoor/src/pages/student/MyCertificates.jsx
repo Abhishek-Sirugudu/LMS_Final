@@ -91,9 +91,7 @@ const MyCertificates = () => {
         <div>
             <div className="student-page-header mb-8">
                 <h3 className="text-2xl font-bold text-primary-900">My Achievements</h3>
-                <div className="bg-amber-100 px-4 py-2 rounded-full text-amber-700 font-bold flex items-center gap-2 text-sm shadow-sm">
-                    <Trophy size={16} /> {xp} XP Earned
-                </div>
+
             </div>
 
             <h4 className="text-lg font-bold text-primary-900 mb-4">Course Certificates</h4>

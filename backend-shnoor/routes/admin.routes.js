@@ -97,29 +97,5 @@ router.get(
   getAllUsers
 );
 
+
 export default router;
-
-
-{/*router.get(
-  "/courses/pending",
-  firebaseAuth,
-  attachUser,
-  roleGuard("admin"),
-  getPendingCourses
-);
-*/}
-{/*router.get(
-  "/courses/approved",
-  firebaseAuth,
-  attachUser,
-  roleGuard("admin"),
-  getApprovedCourses
-);*/}
-
-{/*router.post(
-  "/courses/:courseId/status",
-  firebaseAuth,
-  attachUser,
-  roleGuard("admin"),
-  updateCourseStatus
-);*/}

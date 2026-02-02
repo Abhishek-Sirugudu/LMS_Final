@@ -238,6 +238,7 @@ export const AddCourse = () => {
       navigate("/instructor/dashboard");
     } catch (err) {
       console.error("Save course error:", err);
+      alert("Failed to save course: " + (err.response?.data?.message || err.message));
     } finally {
       setLoading(false);
     }

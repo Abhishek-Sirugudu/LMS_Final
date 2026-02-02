@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from 'react-hot-toast';
 import api from "../../../api/axios";
 import ManageUsersView from "./view";
 
@@ -21,7 +22,7 @@ const ManageUsers = () => {
       setUsers(res.data);
     } catch (error) {
       console.error("Error fetching users:", error);
-      alert("Failed to load users");
+      toast.error("Failed to load users");
     } finally {
       setLoading(false);
     }
@@ -48,10 +49,10 @@ const ManageUsers = () => {
         )
       );
 
-      alert(`User ${action}d successfully.`);
+      toast.success(`User ${action}d successfully.`);
     } catch (error) {
       console.error("Error updating user status:", error);
-      alert("Failed to update user status.");
+      toast.error("Failed to update user status.");
     }
   };
 

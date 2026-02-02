@@ -17,6 +17,8 @@ export const getMyProfile = async (req, res) => {
         linkedin,
         github,
         photo_url AS "photoURL",
+        xp,
+        streak,
         created_at
       FROM users
       WHERE user_id = $1

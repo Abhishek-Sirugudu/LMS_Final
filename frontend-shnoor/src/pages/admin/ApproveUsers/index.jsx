@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from 'react-hot-toast';
 import api from "../../../api/axios";
 import ApproveUsersView from "./view";
 
@@ -39,14 +40,13 @@ const ApproveUsers = () => {
         prev.filter((user) => user.user_id !== userId)
       );
 
-      alert(
-        `User ${
-          action === "active" ? "approved" : "rejected"
+      toast.success(
+        `User ${action === "active" ? "approved" : "rejected"
         } successfully`
       );
     } catch (error) {
       console.error("Failed to update user:", error);
-      alert("Failed to update user status.");
+      toast.error("Failed to update user status.");
     }
   };
 

@@ -26,6 +26,30 @@ export const getStudentExams = async (req, res) => {
   res.json(rows);
 };
 
+export const getExamHistory = async (req, res) => {
+  const studentId = req.user.id;
+  try {
+    const { rows } = await pool.query(`
+      SELECT 
+        s.submission_id,
+        e.exam_id,
+        e.title,
+        s.score as percentage,
+        s.status, 
+        s.submitted_at as attempted_at
+      FROM exam_submissions s
+      JOIN exams e ON s.exam_id = e.exam_id
+      WHERE s.student_id = $1
+      ORDER BY s.submitted_at DESC
+    `, [studentId]);
+
+    res.json(rows);
+  } catch (err) {
+    console.error("Exam History Error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 export const getExamForAttempt = async (req, res) => {
   try {
     const { examId } = req.params;
@@ -167,7 +191,13 @@ export const submitExam = async (req, res) => {
     let score = 0;
     let totalMarks = 0;
     const questions = questionsRes.rows;
-    const passPercentage = 60; // Default or fetch from exam
+
+    // Fetch pass percentage from exam
+    const examInfo = await pool.query(
+      `SELECT pass_percentage FROM exams WHERE exam_id = $1`,
+      [examId]
+    );
+    const passPercentage = examInfo.rows[0]?.pass_percentage || 60;
 
     questions.forEach((q) => {
       totalMarks += q.marks || 0;
@@ -181,26 +211,36 @@ export const submitExam = async (req, res) => {
 
     const percentage = totalMarks === 0 ? 0 : Math.round((score / totalMarks) * 100);
     const hasPassed = percentage >= passPercentage;
-    const status = hasPassed ? 'passed' : 'failed';
 
     /* =========================
-       3️⃣ SAVE SUBMISSION WITH SCORE
+       3️⃣ SAVE SUBMISSION (RAW ANSWERS)
     ========================= */
     await pool.query(
       `
       INSERT INTO exam_submissions
-        (exam_id, student_id, answers, score, status, submitted_at)
-      VALUES ($1, $2, $3, $4, $5, NOW())
+        (exam_id, student_id, answers)
+      VALUES ($1, $2, $3)
       `,
-      [examId, studentId, answers, percentage, status]
+      [examId, studentId, answers]
     );
 
     /* =========================
-       4️⃣ RESPONSE
+       4️⃣ SAVE RESULTS (GRADED SCORES)
+    ========================= */
+    await pool.query(
+      `
+      INSERT INTO exam_results
+        (exam_id, student_id, total_marks, obtained_marks, percentage, passed)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      `,
+      [examId, studentId, totalMarks, score, percentage, hasPassed]
+    );
+
+    /* =========================
+       5️⃣ RESPONSE
     ========================= */
     return res.status(200).json({
       message: "Exam submitted successfully",
-      status: status,
       percentage: percentage,
       passed: hasPassed
     });

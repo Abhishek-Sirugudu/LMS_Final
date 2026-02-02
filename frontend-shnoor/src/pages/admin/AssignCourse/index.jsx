@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from 'react-hot-toast';
 import { auth } from "../../../auth/firebase";
 import api from "../../../api/axios";
 import AssignCourseView from "./view";
@@ -67,7 +68,8 @@ const AssignCourse = () => {
   ========================= */
   const handleAssign = async () => {
     if (selectedStudents.length === 0 || selectedCourses.length === 0) {
-      throw new Error("Select at least one student and one course");
+      toast.error("Select at least one student and one course");
+      return;
     }
 
     try {
